@@ -1,6 +1,6 @@
 {
   "name": "mikaelkaron/cherry-pick-filter",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "summary": "Syncs a working branch to a clean merge branch by cherry-picking commits that don't touch filtered paths. Use when syncing branches to beta/main during PR preparation, or when asked to \"sync to beta\", \"cherry-pick to beta\", or \"update PR branch\".",
   "skills": {
