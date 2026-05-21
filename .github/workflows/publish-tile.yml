@@ -15,7 +15,7 @@ jobs:
         tile:
           - skills/cherry-pick-filter
     steps:
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v5
       - uses: tesslio/publish@main
         with:
           token: ${{ secrets.TESSL_API_TOKEN }}
