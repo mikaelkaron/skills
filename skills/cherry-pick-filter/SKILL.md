@@ -15,45 +15,21 @@ are filtered or included based on their path prefix.
 
 ## Phase 1: Initial Setup
 
-The alias must be registered once per machine. It tells git how to find the
-script relative to the repo root.
-
-### Project-scoped alias (recommended)
-
-Stored in `.git/config` — applies only to this repo:
+Register the alias once per machine. Project-scoped (recommended) uses a repo-relative path; global requires an absolute path.
 
 ```bash
+# Project-scoped (stored in .git/config)
 git config alias.cherry-pick-filter '!.agents/skills/cherry-pick-filter/cherry-pick-filter.mjs'
-```
 
-### Global alias
-
-Stored in `~/.gitconfig` — applies to all repos on this machine. Use an
-absolute path so it works from any directory:
-
-```bash
+# Global (stored in ~/.gitconfig — use absolute path)
 git config --global alias.cherry-pick-filter '!/absolute/path/to/.agents/skills/cherry-pick-filter/cherry-pick-filter.mjs'
 ```
 
-### Verify the alias is registered
-
-```bash
-git config alias.cherry-pick-filter
-# Expected output:
-# !.agents/skills/cherry-pick-filter/cherry-pick-filter.mjs
-```
+Verify: `git config alias.cherry-pick-filter`
 
 If the alias is not found, output: `Error: Alias not registered. Please follow the setup instructions above.`
 
-### Remove the alias
-
-```bash
-# Project-scoped
-git config --unset alias.cherry-pick-filter
-
-# Global
-git config --global --unset alias.cherry-pick-filter
-```
+To remove: `git config --unset alias.cherry-pick-filter` (add `--global` for the global alias).
 
 ## Phase 2: Usage
 
@@ -193,68 +169,5 @@ git cherry-pick --abort
 
 ## Phase 8: One-time History Rewrite
 
-For a final release where filtered paths must not appear anywhere in history
-(e.g. removing `.planning/` from `main` before publishing), use
-`git filter-repo`. This permanently rewrites every commit SHA — do it once,
-on a fresh clone, before force-pushing.
-
-> **Warning:** This breaks all branches and forks that share the rewritten
-> history. Every developer must re-clone or rebase after.
-
-### Requirements
-
-```bash
-# Install git-filter-repo (one of):
-pip install git-filter-repo
-brew install git-filter-repo
-sudo apt install git-filter-repo
-
-# Or download directly:
-curl -sL https://raw.githubusercontent.com/newren/git-filter-repo/main/git-filter-repo \
-  -o /usr/local/bin/git-filter-repo && chmod +x /usr/local/bin/git-filter-repo
-```
-
-### Process
-
-```bash
-# 1. Fresh clone — filter-repo requires it
-git clone <repo-url> repo-clean
-cd repo-clean
-
-# 2. Rewrite history — removes .planning/ from every commit on every branch
-#    Commits that only touched .planning/ are dropped entirely
-git filter-repo --path .planning/ --invert-paths
-
-# 3. Verify — no .planning/ files should appear anywhere
-git log --all --full-history -- '.planning/' | head
-
-# 4. Force-push all clean integration branches
-git push origin main beta rc pre --force-with-lease
-
-# 5. Personal branches must be rebased onto the rewritten history
-#    (all commit SHAs have changed)
-git fetch origin
-git checkout mikaelkaron/beta
-git rebase origin/beta
-```
-
-### Multiple filtered paths
-
-```bash
-# Remove both .planning/ and another directory
-git filter-repo --path .planning/ --path .other/ --invert-paths
-```
-
-### Recovery
-
-If something goes wrong, restore from the backup tag created before the rewrite:
-
-```bash
-git checkout -b beta-restored backup/beta-before-filter-repo
-```
-
-Always create a backup tag before running filter-repo:
-
-```bash
-git tag backup/beta-before-filter-repo beta
-```
+To permanently remove filtered paths from all of git history before publishing,
+see [HISTORY-REWRITE.md](HISTORY-REWRITE.md).
