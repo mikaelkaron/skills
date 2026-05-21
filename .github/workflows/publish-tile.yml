@@ -16,7 +16,8 @@ jobs:
           - skills/cherry-pick-filter
     steps:
       - uses: actions/checkout@v5
-      - uses: tesslio/publish@main
+      - uses: tesslio/setup-tessl@v2
         with:
           token: ${{ secrets.TESSL_API_TOKEN }}
-          path: ${{ matrix.tile }}
+      - run: tessl tile publish .
+        working-directory: ${{ matrix.tile }}
