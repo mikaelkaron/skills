@@ -12,6 +12,10 @@ commits (code + filtered files in the same commit) are detected by analyzing
 all commits first, then reported together, and the operation is halted until
 the user resolves them.
 
+## Available scripts
+
+- **`scripts/cherry-pick-filter.mjs`** — Main entry point. Parses CLI arguments, resolves and validates the target branch (checking out from origin if needed), identifies candidate commits via git pathspec exclusion, detects mixed commits in a pre-flight sanity check, then cherry-picks all clean candidates oldest-first onto the target branch. Emits picked SHAs on stdout when piped; all human-readable output goes to stderr.
+
 ## Setup
 
 Register the alias once per machine. Project-scoped (recommended) uses a repo-relative path; global requires an absolute path.
