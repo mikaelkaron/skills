@@ -19,13 +19,13 @@ Register the alias once per machine. Project-scoped (recommended) uses a repo-re
 
 ```bash
 # Project-scoped (stored in .git/config)
-git config alias.cherry-pick-filter '!.agents/skills/cherry-pick-filter/cherry-pick-filter.mjs'
+git config alias.cherry-pick-filter '!.agents/skills/cherry-pick-filter/scripts/cherry-pick-filter.mjs'
 
 # Global (stored in ~/.gitconfig — use absolute path)
-git config --global alias.cherry-pick-filter '!/absolute/path/to/.agents/skills/cherry-pick-filter/cherry-pick-filter.mjs'
+git config --global alias.cherry-pick-filter '!/absolute/path/to/.agents/skills/cherry-pick-filter/scripts/cherry-pick-filter.mjs'
 ```
 
-Verify: `git config alias.cherry-pick-filter`
+Verify: `git config alias.cherry-pick-filter` — expected: `!.agents/skills/cherry-pick-filter/scripts/cherry-pick-filter.mjs`
 
 If the alias is not found, output: `Error: Alias not registered. Please follow the setup instructions above.`
 
@@ -170,4 +170,4 @@ git cherry-pick --abort
 ## Phase 8: One-time History Rewrite
 
 To permanently remove filtered paths from all of git history before publishing,
-see [HISTORY-REWRITE.md](HISTORY-REWRITE.md).
+see [HISTORY-REWRITE.md](references/HISTORY-REWRITE.md).
