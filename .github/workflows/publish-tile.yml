@@ -5,9 +5,7 @@ permissions:
   contents: read # Required to checkout the repository
 
 on:
-  push:
-    branches:
-      - main # Trigger on push / merge to main
+  workflow_dispatch:
 
 jobs:
   publish:
