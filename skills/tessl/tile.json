@@ -1,0 +1,11 @@
+{
+  "name": "mikaelkaron/tessl",
+  "version": "0.1.0",
+  "private": false,
+  "summary": "Installs the tessl skill tile for an installed skills plugin. Use when asked to install a tile for a plugin or register a skill tile with tessl.",
+  "skills": {
+    "tessl": {
+      "path": "SKILL.md"
+    }
+  }
+}
