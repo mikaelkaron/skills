@@ -13,7 +13,7 @@
   },
   "scripts": {
     "test": "node --experimental-strip-types --test 'test/**/*.test.ts'",
-    "test:types": "tsc --noEmit"
+    "test:types": "tsc -b test/tsconfig.json --noEmit"
   },
   "dependencies": {
     "@oclif/core": "^4",
