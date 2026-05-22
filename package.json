@@ -16,7 +16,8 @@
   },
   "scripts": {
     "build": "tsc -b",
-    "test": "node --experimental-strip-types --test 'packages/*/test/**/*.test.ts'",
+    "pretest": "tsc -b tsconfig.test.json",
+    "test": "node --test 'packages/*/dist/test/**/*.test.js'",
     "test:types": "tsc -b tsconfig.test.json --noEmit",
     "lint": "oxlint .",
     "format": "oxfmt ."

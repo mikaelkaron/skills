@@ -15,7 +15,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "node --experimental-strip-types --test 'test/**/*.test.ts'",
+    "pretest": "tsc -b test/tsconfig.json",
+    "test": "node --test 'dist/test/**/*.test.js'",
     "test:types": "tsc -b test/tsconfig.json --noEmit"
   },
   "dependencies": {
