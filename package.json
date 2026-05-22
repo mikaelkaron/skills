@@ -12,7 +12,7 @@
     "format": "oxfmt ."
   },
   "dependencies": {
-    "@mikaelkaron/skills-cli": "*"
+    "@mikaelkaron/skills-cli": "^0"
   },
   "devDependencies": {
     "oxfmt": "^0.51.0",
