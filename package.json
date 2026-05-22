@@ -1,6 +1,6 @@
 {
   "name": "@mikaelkaron/skills",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "bin": {
     "mks": "bin/run.js"
   },
@@ -22,7 +22,7 @@
     "format": "oxfmt ."
   },
   "dependencies": {
-    "@mikaelkaron/skills-cli": "^0.1.1"
+    "@mikaelkaron/skills-cli": "^0.2.0"
   },
   "devDependencies": {
     "oxfmt": "^0.51.0",
