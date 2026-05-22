@@ -6,6 +6,9 @@
   ],
   "files": [],
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "npm test --workspaces --if-present",
     "test:types": "npm run test:types --workspaces --if-present",
