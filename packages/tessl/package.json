@@ -2,7 +2,7 @@
   "name": "@mikaelkaron/skills-tessl",
   "version": "0.0.0",
   "bin": {
-    "mks-tessl": "bin/run.ts"
+    "mks-tessl": "bin/run.js"
   },
   "files": [
     "bin",

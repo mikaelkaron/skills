@@ -2,7 +2,7 @@
   "name": "@mikaelkaron/skills-cli",
   "version": "0.0.0",
   "bin": {
-    "mks": "bin/run.ts"
+    "mks": "bin/run.js"
   },
   "files": [
     "bin"
