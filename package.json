@@ -1,0 +1,24 @@
+{
+  "name": "@mikaelkaron/skills",
+  "version": "0.1.0",
+  "workspaces": [
+    "packages/*"
+  ],
+  "type": "module",
+  "scripts": {
+    "test": "npm test --workspaces --if-present",
+    "test:types": "npm run test:types --workspaces --if-present",
+    "lint": "oxlint .",
+    "format": "oxfmt ."
+  },
+  "dependencies": {
+    "@mikaelkaron/skills-cli": "*"
+  },
+  "devDependencies": {
+    "oxfmt": "^0.51.0",
+    "oxlint": "^1.66.0"
+  },
+  "engines": {
+    "node": ">=22.18"
+  }
+}
