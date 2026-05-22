@@ -1,5 +1,5 @@
 import { Args, Command, Flags } from "@oclif/core";
-import { exec, tryExec } from "../lib/git.ts";
+import { exec, tryExec } from "../lib/git.js";
 
 function out(sha: string): void {
   if (!process.stdout.isTTY) process.stdout.write(sha + "\n");

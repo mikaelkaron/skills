@@ -6,7 +6,7 @@
   },
   "files": [
     "bin",
-    "src",
+    "dist",
     "oclif.manifest.json"
   ],
   "type": "module",
@@ -14,8 +14,9 @@
     "access": "public"
   },
   "scripts": {
+    "build": "tsc",
     "test": "node --experimental-strip-types --test 'test/**/*.test.ts'",
-    "test:types": "tsc --noEmit"
+    "test:types": "tsc -b test/tsconfig.json --noEmit"
   },
   "dependencies": {
     "@oclif/core": "^4"
@@ -29,10 +30,10 @@
     "bin": "mks-tessl",
     "commands": {
       "globPatterns": [
-        "**/*.ts"
+        "**/*.js"
       ],
       "strategy": "pattern",
-      "target": "./src/commands"
+      "target": "./dist/commands"
     },
     "id": "tessl"
   },
