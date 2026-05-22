@@ -1,0 +1,36 @@
+{
+  "name": "@mikaelkaron/skills-cli",
+  "version": "0.1.0",
+  "bin": {
+    "mks": "./bin/run.ts"
+  },
+  "files": [
+    "bin"
+  ],
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-strip-types --test 'test/**/*.test.ts'",
+    "test:types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@oclif/core": "^4",
+    "@oclif/plugin-plugins": "^5"
+  },
+  "devDependencies": {
+    "@oclif/test": "^4.1.18",
+    "@types/node": "^22",
+    "typescript": "^5"
+  },
+  "oclif": {
+    "bin": "mks",
+    "dirname": "mikaelkaron/skills",
+    "pluginPrefix": "skills",
+    "plugins": [
+      "@oclif/plugin-plugins"
+    ],
+    "scope": "mikaelkaron"
+  },
+  "engines": {
+    "node": ">=22.18"
+  }
+}

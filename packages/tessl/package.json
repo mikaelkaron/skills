@@ -1,0 +1,43 @@
+{
+  "name": "@mikaelkaron/skills-tessl",
+  "version": "0.1.0",
+  "bin": {
+    "mks-tessl": "./bin/run.ts"
+  },
+  "files": [
+    "bin",
+    "src",
+    "oclif.manifest.json"
+  ],
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-strip-types --test 'test/**/*.test.ts'",
+    "test:types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@oclif/core": "^4"
+  },
+  "devDependencies": {
+    "@oclif/test": "^4.1.18",
+    "@types/node": "^22",
+    "typescript": "^5"
+  },
+  "oclif": {
+    "bin": "mks-tessl",
+    "commands": {
+      "globPatterns": [
+        "**/*.ts"
+      ],
+      "strategy": "pattern",
+      "target": "./src/commands"
+    },
+    "id": "tessl"
+  },
+  "engines": {
+    "node": ">=22.18"
+  },
+  "tessl": {
+    "tile": "mikaelkaron/tessl",
+    "version": "0.1.0"
+  }
+}

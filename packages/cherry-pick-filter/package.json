@@ -1,0 +1,43 @@
+{
+  "name": "@mikaelkaron/skills-cherry-pick-filter",
+  "version": "0.1.0",
+  "bin": {
+    "mks-cherry-pick-filter": "./bin/run.ts"
+  },
+  "files": [
+    "bin",
+    "src",
+    "oclif.manifest.json"
+  ],
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-strip-types --test 'test/**/*.test.ts'",
+    "test:types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@oclif/core": "^4"
+  },
+  "devDependencies": {
+    "@oclif/test": "^4.1.18",
+    "@types/node": "^22",
+    "typescript": "^5"
+  },
+  "oclif": {
+    "bin": "mks-cherry-pick-filter",
+    "commands": {
+      "globPatterns": [
+        "**/*.ts"
+      ],
+      "strategy": "pattern",
+      "target": "./src/commands"
+    },
+    "id": "cherry-pick-filter"
+  },
+  "engines": {
+    "node": ">=22.18"
+  },
+  "tessl": {
+    "tile": "mikaelkaron/cherry-pick-filter",
+    "version": "0.1.6"
+  }
+}
