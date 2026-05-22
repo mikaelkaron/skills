@@ -32,8 +32,6 @@ Verify: `git config alias.cherry-pick-filter` — expected: `!.agents/skills/che
 
 If the alias is not found, output: `Error: Alias not registered. Please follow the setup instructions above.`
 
-To remove: `git config --unset alias.cherry-pick-filter` (add `--global` for the global alias).
-
 ## Usage
 
 ```bash
@@ -63,18 +61,6 @@ All human-readable output goes to stderr. stdout emits one picked commit SHA per
 # Capture picked SHAs
 git cherry-pick-filter beta --filter .planning/ | xargs git log --oneline
 ```
-
-## How it works
-
-**Step 1 — Filter candidates:** Git's pathspec exclusion removes commits where all changed files match a filter prefix. Commits touching only `.planning/` are excluded; code-only and mixed commits are included.
-
-If no commits match, output: `No commits to cherry-pick.` and exit successfully.
-
-**Step 2 — Sanity check:** Every candidate is inspected before any cherry-pick runs. If any commit touches both filtered and unfiltered files, the entire operation is aborted and all mixed commits are reported at once.
-
-**Step 3 — Execute:** Commits are applied oldest-first. A single conflict aborts the operation with recovery instructions.
-
-The script is incremental — safe to run multiple times. Only commits not yet on the target branch are picked.
 
 ## Workflow
 
