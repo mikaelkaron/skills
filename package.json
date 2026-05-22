@@ -1,17 +1,23 @@
 {
   "name": "@mikaelkaron/skills",
   "version": "0.1.1",
+  "bin": {
+    "mks": "bin/run.js"
+  },
   "workspaces": [
     "packages/*"
   ],
-  "files": [],
+  "files": [
+    "bin"
+  ],
   "type": "module",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "test": "npm test --workspaces --if-present",
-    "test:types": "npm run test:types --workspaces --if-present",
+    "build": "tsc -b",
+    "test": "node --experimental-strip-types --test 'packages/*/test/**/*.test.ts'",
+    "test:types": "tsc -b tsconfig.test.json --noEmit",
     "lint": "oxlint .",
     "format": "oxfmt ."
   },
