@@ -1,6 +1,6 @@
 {
   "name": "@mikaelkaron/skills",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "workspaces": [
     "packages/*"
   ],
@@ -16,7 +16,7 @@
     "format": "oxfmt ."
   },
   "dependencies": {
-    "@mikaelkaron/skills-cli": "^0"
+    "@mikaelkaron/skills-cli": "^0.1.1"
   },
   "devDependencies": {
     "oxfmt": "^0.51.0",
