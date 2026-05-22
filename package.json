@@ -4,6 +4,7 @@
   "workspaces": [
     "packages/*"
   ],
+  "files": [],
   "type": "module",
   "scripts": {
     "test": "npm test --workspaces --if-present",
