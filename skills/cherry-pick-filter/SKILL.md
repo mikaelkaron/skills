@@ -12,23 +12,17 @@ commits (code + filtered files in the same commit) are detected by analyzing
 all commits first, then reported together, and the operation is halted until
 the user resolves them.
 
-## Available scripts
-
-- **`scripts/cherry-pick-filter.mjs`** — Main entry point. Parses CLI arguments, resolves and validates the target branch (checking out from origin if needed), identifies candidate commits via git pathspec exclusion, detects mixed commits in a pre-flight sanity check, then cherry-picks all clean candidates oldest-first onto the target branch. Emits picked SHAs on stdout when piped; all human-readable output goes to stderr.
-
 ## Setup
 
-Register the alias once per machine. Project-scoped (recommended) uses a repo-relative path; global requires an absolute path.
+Install the mks CLI, add the cherry-pick-filter plugin, and register the alias — once per machine:
 
 ```bash
-# Project-scoped (stored in .git/config)
-git config alias.cherry-pick-filter '!.agents/skills/cherry-pick-filter/scripts/cherry-pick-filter.mjs'
-
-# Global (stored in ~/.gitconfig — use absolute path)
-git config --global alias.cherry-pick-filter '!/absolute/path/to/.agents/skills/cherry-pick-filter/scripts/cherry-pick-filter.mjs'
+npm install -g @mikaelkaron/skills
+mks plugins install cherry-pick-filter
+git config alias.cherry-pick-filter '!mks cherry-pick-filter'
 ```
 
-Verify: `git config alias.cherry-pick-filter` — expected: `!.agents/skills/cherry-pick-filter/scripts/cherry-pick-filter.mjs`
+Verify: `git config alias.cherry-pick-filter` — expected: `!mks cherry-pick-filter`
 
 If the alias is not found, output: `Error: Alias not registered. Please follow the setup instructions above.`
 
@@ -38,13 +32,14 @@ If the alias is not found, output: `Error: Alias not registered. Please follow t
 git cherry-pick-filter <target-branch> --filter <prefix> [--filter <prefix>...] [--dry-run]
 ```
 
-| Argument | Required | Description |
-|----------|----------|-------------|
-| `target-branch` | Yes | Branch to cherry-pick code commits onto |
+| Argument            | Required         | Description                                                        |
+| ------------------- | ---------------- | ------------------------------------------------------------------ |
+| `target-branch`     | Yes              | Branch to cherry-pick code commits onto                            |
 | `--filter <prefix>` | Yes (repeatable) | Path prefix to filter out. No default — always provide explicitly. |
-| `--dry-run` | No | Analyse and report without cherry-picking |
+| `--dry-run`         | No               | Analyse and report without cherry-picking                          |
 
 **Errors:**
+
 - `Error: Target branch is required.` — no target branch provided
 - `Error: Target branch '<branch>' not found.` — branch does not exist
 - `Error: At least one --filter prefix is required.` — no `--filter` provided
