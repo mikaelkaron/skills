@@ -1,17 +1,20 @@
 import assert from "node:assert/strict";
 import { afterEach, beforeEach, describe, it } from "node:test";
 import { execSync } from "node:child_process";
-import { mkdtempSync, rmSync } from "node:fs";
+import { existsSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { runCommand } from "@oclif/test";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
-const root = join(dirname(fileURLToPath(import.meta.url)), "../..");
-const bundle = join(
-  dirname(fileURLToPath(import.meta.url)),
-  "../fixtures/repo.bundle",
-);
+function findPkgRoot(dir: string): string {
+  return existsSync(join(dir, "package.json"))
+    ? dir
+    : findPkgRoot(dirname(dir));
+}
+
+const root = findPkgRoot(dirname(fileURLToPath(import.meta.url)));
+const bundle = join(root, "test/fixtures/repo.bundle");
 
 // Fixture repo structure (see test/fixtures/repo.bundle):
 //   main:       init → feat: add index → chore: planning notes → feat: add other

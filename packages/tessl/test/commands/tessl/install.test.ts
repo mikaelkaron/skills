@@ -4,6 +4,7 @@ import { runCommand } from "@oclif/test";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import {
+  existsSync,
   mkdirSync,
   readFileSync,
   writeFileSync,
@@ -12,7 +13,13 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 
-const root = join(dirname(fileURLToPath(import.meta.url)), "../../..");
+function findPkgRoot(dir: string): string {
+  return existsSync(join(dir, "package.json"))
+    ? dir
+    : findPkgRoot(dirname(dir));
+}
+
+const root = findPkgRoot(dirname(fileURLToPath(import.meta.url)));
 
 describe("tessl install", () => {
   let fakeTessl: string;
