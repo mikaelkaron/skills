@@ -8,6 +8,9 @@
     "bin"
   ],
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "node --experimental-strip-types --test 'test/**/*.test.ts'",
     "test:types": "tsc --noEmit"
