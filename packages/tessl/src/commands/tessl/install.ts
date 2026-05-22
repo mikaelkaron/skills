@@ -48,7 +48,9 @@ export default class TesslInstall extends Command {
       : tesslPjson.tile;
 
     const tessCmd = process.env["TESSL_CMD"] ?? "tessl";
-    const result = spawnSync(tessCmd, ["tile", "install", tileRef]);
+    const result = spawnSync(tessCmd, ["tile", "install", tileRef], {
+      stdio: "inherit",
+    });
 
     if (result.error) {
       this.error(
