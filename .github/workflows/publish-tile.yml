@@ -6,14 +6,41 @@ permissions:
 
 on:
   workflow_dispatch:
+    inputs:
+      cherry-pick-filter:
+        description: Publish cherry-pick-filter tile
+        type: boolean
+        default: false
+      cli:
+        description: Publish cli tile
+        type: boolean
+        default: false
+      tessl:
+        description: Publish tessl tile
+        type: boolean
+        default: false
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        run: |
+          tiles=()
+          [ "${{ inputs.cherry-pick-filter }}" = "true" ] && tiles+=("\"skills/cherry-pick-filter\"")
+          [ "${{ inputs.cli }}" = "true" ] && tiles+=("\"skills/cli\"")
+          [ "${{ inputs.tessl }}" = "true" ] && tiles+=("\"skills/tessl\"")
+          echo "matrix=[$(IFS=,; echo "${tiles[*]}")]" >> $GITHUB_OUTPUT
+
   publish:
+    needs: setup
+    if: ${{ needs.setup.outputs.matrix != '[]' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        tile:
-          - skills/cherry-pick-filter
+        tile: ${{ fromJson(needs.setup.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v5
       - uses: tesslio/setup-tessl@v2
