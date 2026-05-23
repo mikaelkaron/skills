@@ -34,7 +34,7 @@
         "**/*.js"
       ],
       "strategy": "pattern",
-      "target": "./dist/commands"
+      "target": "./dist/src/commands"
     },
     "id": "cherry-pick-filter"
   },
