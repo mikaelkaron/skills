@@ -11,6 +11,7 @@
   "files": [],
   "references": [
     { "path": "packages/cherry-pick-filter" },
-    { "path": "packages/tessl" }
+    { "path": "packages/tessl" },
+    { "path": "packages/cli" }
   ]
 }

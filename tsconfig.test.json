@@ -1,9 +1,13 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig.json",
-  "files": [],
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  },
+  "include": ["packages/*/test/**/*.ts"],
   "references": [
-    { "path": "packages/cherry-pick-filter/test" },
-    { "path": "packages/tessl/test" },
-    { "path": "packages/cli/test" }
+    { "path": "packages/cherry-pick-filter" },
+    { "path": "packages/tessl" }
   ]
 }

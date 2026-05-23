@@ -2,8 +2,10 @@
   "$schema": "https://json.schemastore.org/tsconfig.json",
   "extends": "../tsconfig.json",
   "compilerOptions": {
+    "composite": false,
     "rootDir": ".",
-    "outDir": "../dist/test"
+    "allowImportingTsExtensions": true,
+    "noEmit": true
   },
   "include": ["."],
   "references": [{ "path": ".." }]

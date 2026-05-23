@@ -15,9 +15,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "pretest": "tsc -b test/tsconfig.json",
-    "test": "node --test 'dist/test/**/*.test.js'",
-    "test:types": "tsc -b test/tsconfig.json --noEmit"
+    "test": "node --experimental-strip-types --test 'test/**/*.test.ts'",
+    "test:types": "tsc -p test/tsconfig.json"
   },
   "dependencies": {
     "@oclif/core": "^4"
