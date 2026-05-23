@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { afterEach, beforeEach, describe, it } from "node:test";
 import { execSync } from "node:child_process";
-import { existsSync, mkdtempSync, rmSync } from "node:fs";
+import { existsSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { runCommand } from "@oclif/test";
 import { fileURLToPath } from "node:url";
@@ -85,12 +85,13 @@ describe("cherry-pick-filter", () => {
   it("aborts without cherry-picking when a mixed commit is detected", async () => {
     git("checkout", "main-mixed");
     const betaBefore = git("rev-parse", "beta");
-    const { error } = await runCommand(
+    const { error, stderr } = await runCommand(
       ["cherry-pick-filter", "beta", "--filter", ".planning/"],
       { root },
     );
-    assert.ok(error);
+    assert.match(error!.message, /mixed commit/);
     assert.equal(git("rev-parse", "beta"), betaBefore);
+    assert.match(stderr, /Mixed commits detected/);
   });
 
   it("reports candidates without cherry-picking on --dry-run", async () => {
@@ -127,6 +128,27 @@ describe("cherry-pick-filter", () => {
       { root },
     );
     assert.match(error!.message, /not found locally or on origin/);
+  });
+
+  it("errors when cherry-pick conflicts", async () => {
+    // Create a clean one-commit source branch so the first pick immediately conflicts
+    git("checkout", "-b", "conflict-src", "beta");
+    writeFileSync(join(dir, "conflict.ts"), "source version\n");
+    git("add", "conflict.ts");
+    execSync('git commit -m "feat: add conflict"', { cwd: dir, stdio: "pipe" });
+
+    git("checkout", "beta");
+    writeFileSync(join(dir, "conflict.ts"), "target version\n");
+    git("add", "conflict.ts");
+    execSync('git commit -m "beta: add conflict"', { cwd: dir, stdio: "pipe" });
+
+    git("checkout", "conflict-src");
+    const { error, stderr } = await runCommand(
+      ["cherry-pick-filter", "beta", "--filter", ".planning/"],
+      { root },
+    );
+    assert.ok(error);
+    assert.match(stderr, /cherry-pick failed/i);
   });
 
   it("errors when already on target branch", async () => {

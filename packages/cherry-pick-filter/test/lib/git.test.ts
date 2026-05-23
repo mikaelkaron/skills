@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { exec, tryExec } from "../../src/lib/git.js";
+import { exec, tryExec } from "../../src/lib/git.ts";
 
 describe("exec", () => {
   it("returns trimmed stdout", () => {
@@ -19,8 +19,9 @@ describe("tryExec", () => {
     assert.equal(result.output, "hello");
   });
 
-  it("returns ok:false on failure", () => {
+  it("returns ok:false with output on failure", () => {
     const result = tryExec("false");
     assert.equal(result.ok, false);
+    assert.ok(result.output.length > 0);
   });
 });
