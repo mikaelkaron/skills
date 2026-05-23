@@ -81,11 +81,10 @@ All human-readable output goes to stderr. stdout emits one picked commit SHA per
           `git checkout --track origin/${targetBranch}`,
         );
         if (!checkoutResult.ok) {
-          this.logToStderr(
-            `Error: failed to checkout '${targetBranch}' from origin.`,
-          );
           this.logToStderr(checkoutResult.output);
-          this.exit(1);
+          this.error(`failed to checkout '${targetBranch}' from origin.`, {
+            exit: 1,
+          });
         }
         exec(`git checkout ${currentBranch}`);
       } else {
@@ -158,7 +157,10 @@ All human-readable output goes to stderr. stdout emits one picked commit SHA per
       this.logToStderr(
         `Then re-run: git cherry-pick-filter ${targetBranch} ${filters.map((f) => `--filter ${f}`).join(" ")}`,
       );
-      this.exit(1);
+      this.error(
+        `${mixed.length} mixed commit(s) detected — split before syncing.`,
+        { exit: 1 },
+      );
     }
 
     const verb = dryRun ? "Would pick" : "Ready to pick";
@@ -185,13 +187,12 @@ All human-readable output goes to stderr. stdout emits one picked commit SHA per
         out(sha);
         picked++;
       } else {
-        this.logToStderr(
-          `\nCherry-pick failed: ${sha.slice(0, 9)} ${subject}\n`,
-        );
         this.logToStderr("Resolve the conflict then run:");
         this.logToStderr("  git cherry-pick --continue");
         this.logToStderr("  git cherry-pick --abort   (to cancel)");
-        this.exit(1);
+        this.error(`cherry-pick failed: ${sha.slice(0, 9)} ${subject}`, {
+          exit: 1,
+        });
       }
     }
 
