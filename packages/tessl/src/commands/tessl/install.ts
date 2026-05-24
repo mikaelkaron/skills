@@ -1,5 +1,5 @@
 import { Args, Command } from "@oclif/core";
-import { spawnSync } from "node:child_process";
+import { install } from "../../lib/tessl.js";
 
 type PluginPjson = {
   tessl?: { tile?: string; version?: string };
@@ -47,22 +47,10 @@ export default class TesslInstall extends Command {
       ? `${tesslPjson.tile}@${tesslPjson.version}`
       : tesslPjson.tile;
 
-    const tessCmd = process.env["TESSL_CMD"] ?? "tessl";
-    const result = spawnSync(tessCmd, ["tile", "install", tileRef], {
-      stdio: "inherit",
-    });
-
-    if (result.error) {
-      this.error(
-        result.error.message.includes("ENOENT")
-          ? "tessl CLI not found. Install it from https://tessl.io"
-          : result.error.message,
-        { exit: 1 },
-      );
-    }
-
-    if (result.status !== 0) {
-      this.exit(result.status ?? 1);
+    try {
+      install(tileRef);
+    } catch (err: unknown) {
+      this.error((err as Error).message, { exit: 1 });
     }
   }
 }
