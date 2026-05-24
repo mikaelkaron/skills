@@ -17,9 +17,11 @@ export default class TesslInstall extends Command {
     },
   ];
 
+  static override strict = false;
+
   static override args = {
     plugin: Args.string({
-      description: "Installed plugin name whose tile should be installed",
+      description: "Installed plugin name(s) whose tile should be installed",
       required: true,
     }),
   };
@@ -40,9 +42,6 @@ export default class TesslInstall extends Command {
       char: "v",
       description: "Show detailed warning messages during installation",
     }),
-    "watch-local": Flags.boolean({
-      description: "Watch local file-source tiles and reinstall on changes",
-    }),
     "accept-warnings": Flags.boolean({
       description: "Pre-accept install policy warnings (no interactive prompt)",
     }),
@@ -53,41 +52,43 @@ export default class TesslInstall extends Command {
   };
 
   async run(): Promise<void> {
-    const { args, flags } = await this.parse(TesslInstall);
-
-    const plugin = [...this.config.plugins.values()].find(
-      (p) => (p.pjson as PluginPjson).oclif?.id === args.plugin,
-    );
-
-    if (!plugin) {
-      this.error(`Plugin '${args.plugin}' is not installed.`, { exit: 1 });
-    }
-
-    const tesslPjson = (plugin.pjson as PluginPjson).tessl;
-    if (!tesslPjson?.tile) {
-      this.error(
-        `Plugin '${args.plugin}' does not declare a tessl tile in package.json.`,
-        { exit: 1 },
-      );
-    }
-
-    const tileRef = tesslPjson.version
-      ? `${tesslPjson.tile}@${tesslPjson.version}`
-      : tesslPjson.tile;
+    const { flags, argv } = await this.parse(TesslInstall);
+    const pluginNames = argv as string[];
 
     const extraArgs: string[] = [];
     if (flags.global) extraArgs.push("--global");
     for (const skill of flags.skill ?? []) extraArgs.push("--skill", skill);
     if (flags.yes) extraArgs.push("--yes");
     if (flags.verbose) extraArgs.push("--verbose");
-    if (flags["watch-local"]) extraArgs.push("--watch-local");
     if (flags["accept-warnings"]) extraArgs.push("--accept-warnings");
     for (const agent of flags.agent ?? []) extraArgs.push("--agent", agent);
 
-    try {
-      install(tileRef, undefined, extraArgs);
-    } catch (err: unknown) {
-      this.error((err as Error).message, { exit: 1 });
+    for (const pluginName of pluginNames) {
+      const plugin = [...this.config.plugins.values()].find(
+        (p) => (p.pjson as PluginPjson).oclif?.id === pluginName,
+      );
+
+      if (!plugin) {
+        this.error(`Plugin '${pluginName}' is not installed.`, { exit: 1 });
+      }
+
+      const tesslPjson = (plugin.pjson as PluginPjson).tessl;
+      if (!tesslPjson?.tile) {
+        this.error(
+          `Plugin '${pluginName}' does not declare a tessl tile in package.json.`,
+          { exit: 1 },
+        );
+      }
+
+      const tileRef = tesslPjson.version
+        ? `${tesslPjson.tile}@${tesslPjson.version}`
+        : tesslPjson.tile;
+
+      try {
+        install(tileRef, undefined, extraArgs);
+      } catch (err: unknown) {
+        this.error((err as Error).message, { exit: 1 });
+      }
     }
   }
 }
