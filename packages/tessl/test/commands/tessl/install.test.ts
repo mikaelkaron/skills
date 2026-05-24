@@ -116,7 +116,14 @@ describe("tessl install", () => {
     it("forwards multiple --agent flags", async () => {
       makeFakeTessl();
       await runCommand(
-        ["tessl:install", "tessl", "--agent", "claude-code", "--agent", "cursor"],
+        [
+          "tessl:install",
+          "tessl",
+          "--agent",
+          "claude-code",
+          "--agent",
+          "cursor",
+        ],
         { root },
       );
       assert.match(lastArgs(), /--agent claude-code --agent cursor/);
@@ -138,10 +145,9 @@ describe("tessl install", () => {
   describe("multiple plugins", () => {
     it("installs each plugin in turn", async () => {
       makeFakeTessl();
-      const { error } = await runCommand(
-        ["tessl:install", "tessl", "tessl"],
-        { root },
-      );
+      const { error } = await runCommand(["tessl:install", "tessl", "tessl"], {
+        root,
+      });
       assert.equal(error, undefined);
       const lines = lastArgs().split("\n");
       assert.equal(lines.length, 2);

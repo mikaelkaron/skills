@@ -52,10 +52,9 @@ function lastArgs(): string {
 
 describe("tessl uninstall", () => {
   it("errors when plugin is not installed", async () => {
-    const { error } = await runCommand(
-      ["tessl:uninstall", "unknown-plugin"],
-      { root },
-    );
+    const { error } = await runCommand(["tessl:uninstall", "unknown-plugin"], {
+      root,
+    });
     assert.match(error!.message, /is not installed/);
   });
 
@@ -74,10 +73,9 @@ describe("tessl uninstall", () => {
 
     it("forwards --skill flag", async () => {
       makeFakeTessl();
-      await runCommand(
-        ["tessl:uninstall", "tessl", "--skill", "my-skill"],
-        { root },
-      );
+      await runCommand(["tessl:uninstall", "tessl", "--skill", "my-skill"], {
+        root,
+      });
       assert.match(lastArgs(), /--skill my-skill/);
     });
 

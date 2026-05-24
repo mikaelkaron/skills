@@ -29,7 +29,8 @@ export default class TesslInstall extends Command {
   static override flags = {
     global: Flags.boolean({
       char: "g",
-      description: "Install tiles globally to ~/.tessl/ instead of the current project",
+      description:
+        "Install tiles globally to ~/.tessl/ instead of the current project",
     }),
     skill: Flags.string({
       multiple: true,
