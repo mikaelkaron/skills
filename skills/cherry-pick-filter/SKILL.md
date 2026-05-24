@@ -14,19 +14,28 @@ the user resolves them.
 
 ## Setup
 
-Install the mks CLI, add the cherry-pick-filter plugin, and register the alias — once per machine:
+Install the mks CLI and add the cherry-pick-filter plugin — once per machine:
 
 ```bash
 npm install -g @mikaelkaron/skills
 mks plugins install cherry-pick-filter
+```
+
+Optionally register a git alias for a shorter invocation:
+
+```bash
 git config alias.cherry-pick-filter '!mks cherry-pick-filter'
 ```
 
-Verify: `git config alias.cherry-pick-filter` — expected: `!mks cherry-pick-filter`
-
-If the alias is not found, output: `Error: Alias not registered. Please follow the setup instructions above.`
-
 ## Usage
+
+Via the mks CLI:
+
+```bash
+mks cherry-pick-filter <target-branch> --filter <prefix> [--filter <prefix>...] [--dry-run]
+```
+
+Or via the git alias (if registered):
 
 ```bash
 git cherry-pick-filter <target-branch> --filter <prefix> [--filter <prefix>...] [--dry-run]
@@ -45,23 +54,23 @@ git cherry-pick-filter <target-branch> --filter <prefix> [--filter <prefix>...] 
 - `Error: At least one --filter prefix is required.` — no `--filter` provided
 
 ```bash
-git cherry-pick-filter beta --filter .planning/
-git cherry-pick-filter beta --filter .planning/ --filter .agents/
-git cherry-pick-filter beta --filter .planning/ --dry-run
+mks cherry-pick-filter beta --filter .planning/
+mks cherry-pick-filter beta --filter .planning/ --filter .agents/
+mks cherry-pick-filter beta --filter .planning/ --dry-run
 ```
 
 All human-readable output goes to stderr. stdout emits one picked commit SHA per line — but only when piped (not a TTY):
 
 ```bash
 # Capture picked SHAs
-git cherry-pick-filter beta --filter .planning/ | xargs git log --oneline
+mks cherry-pick-filter beta --filter .planning/ | xargs git log --oneline
 ```
 
 ## Workflow
 
 ```
 1. Work freely on your personal branch (code + filtered dirs freely mixed)
-2. git cherry-pick-filter beta --filter .planning/
+2. mks cherry-pick-filter beta --filter .planning/
 3. git push origin beta
 4. Open or update PR: personal branch is your full history, beta is the PR branch
 5. Implement fixes on personal branch, then repeat from step 2
@@ -81,7 +90,7 @@ Mixed commits detected — fix these before syncing:
 Split each commit with:
   git rebase -i 3c75377^
 
-Then re-run: git cherry-pick-filter beta --filter .planning/
+Then re-run: mks cherry-pick-filter beta --filter .planning/
 ```
 
 **Cherry-pick conflicts** — the script stops immediately:
