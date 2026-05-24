@@ -17,6 +17,8 @@ export default class TesslInstall extends Command {
     },
   ];
 
+  static override strict = false;
+
   static override args = {
     plugin: Args.string({
       description: "Installed plugin name whose tile should be installed",
@@ -25,7 +27,8 @@ export default class TesslInstall extends Command {
   };
 
   async run(): Promise<void> {
-    const { args } = await this.parse(TesslInstall);
+    const { args, argv } = await this.parse(TesslInstall);
+    const extraArgs = (argv as string[]).slice(1);
 
     const plugin = [...this.config.plugins.values()].find(
       (p) => (p.pjson as PluginPjson).oclif?.id === args.plugin,
@@ -48,7 +51,7 @@ export default class TesslInstall extends Command {
       : tesslPjson.tile;
 
     try {
-      install(tileRef);
+      install(tileRef, undefined, extraArgs);
     } catch (err: unknown) {
       this.error((err as Error).message, { exit: 1 });
     }
