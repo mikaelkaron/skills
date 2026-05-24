@@ -1,16 +1,16 @@
 import { spawnSync } from "node:child_process";
 import which from "which";
 
-export function install(
-  tile: string,
-  cmd = process.env["TESSL_CMD"] ??
+function defaultCmd() {
+  return (
+    process.env["TESSL_CMD"] ??
     which.sync("tessl", { nothrow: true }) ??
-    "tessl",
-  extraArgs: string[] = [],
-): void {
-  const result = spawnSync(cmd, ["install", tile, ...extraArgs], {
-    stdio: "inherit",
-  });
+    "tessl"
+  );
+}
+
+function run(args: string[], cmd = defaultCmd()): void {
+  const result = spawnSync(cmd, args, { stdio: "inherit" });
 
   if (result.error) {
     throw new Error(
@@ -23,4 +23,20 @@ export function install(
   if (result.status !== 0) {
     process.exit(result.status ?? 1);
   }
+}
+
+export function install(
+  tile: string,
+  cmd?: string,
+  extraArgs: string[] = [],
+): void {
+  run(["install", tile, ...extraArgs], cmd);
+}
+
+export function uninstall(
+  tile: string,
+  cmd?: string,
+  extraArgs: string[] = [],
+): void {
+  run(["uninstall", tile, ...extraArgs], cmd);
 }
