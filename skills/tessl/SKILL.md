@@ -6,8 +6,6 @@ compatibility: "Requires the mks CLI with the tessl plugin installed, and the te
 
 # tessl
 
-The `tessl` plugin for the `skills` CLI installs or uninstalls the tessl skill tile declared in a plugin's `package.json`. It reads `tessl.tile` and `tessl.version` from the installed plugin and runs `tessl install <tile>@<version>` or `tessl uninstall <tile>@<version>`.
-
 ## Setup
 
 Install the tessl plugin once per machine:
@@ -49,6 +47,8 @@ mks tessl:install cherry-pick-filter --yes --verbose
 mks tessl:install cherry-pick-filter --agent claude-code --agent cursor
 ```
 
+Verify: check that the tile appears in the project's `.tessl/` directory (or `~/.tessl/` when `--global` is used).
+
 ### Uninstall
 
 ```bash
@@ -69,6 +69,8 @@ mks tessl:uninstall tessl
 mks tessl:uninstall cherry-pick-filter tessl
 mks tessl:uninstall cherry-pick-filter --global
 ```
+
+Verify: check that the tile is no longer present in the project's `.tessl/` directory (or `~/.tessl/` when `--global` is used).
 
 **Errors:**
 
