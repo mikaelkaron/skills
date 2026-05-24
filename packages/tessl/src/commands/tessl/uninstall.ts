@@ -32,10 +32,6 @@ export default class TesslUninstall extends Command {
       description:
         "Uninstall tiles from global ~/.tessl/ instead of the current project",
     }),
-    skill: Flags.string({
-      multiple: true,
-      description: "Remove specific skills instead of the entire tile",
-    }),
   };
 
   async run(): Promise<void> {
@@ -44,7 +40,6 @@ export default class TesslUninstall extends Command {
 
     const extraArgs: string[] = [];
     if (flags.global) extraArgs.push("--global");
-    for (const skill of flags.skill ?? []) extraArgs.push("--skill", skill);
 
     for (const pluginName of pluginNames) {
       const plugin = [...this.config.plugins.values()].find(

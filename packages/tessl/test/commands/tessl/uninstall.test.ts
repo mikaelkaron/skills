@@ -70,23 +70,6 @@ describe("tessl uninstall", () => {
       await runCommand(["tessl:uninstall", "tessl", "--global"], { root });
       assert.match(lastArgs(), /--global/);
     });
-
-    it("forwards --skill flag", async () => {
-      makeFakeTessl();
-      await runCommand(["tessl:uninstall", "tessl", "--skill", "my-skill"], {
-        root,
-      });
-      assert.match(lastArgs(), /--skill my-skill/);
-    });
-
-    it("forwards multiple --skill flags", async () => {
-      makeFakeTessl();
-      await runCommand(
-        ["tessl:uninstall", "tessl", "--skill", "a", "--skill", "b"],
-        { root },
-      );
-      assert.match(lastArgs(), /--skill a --skill b/);
-    });
   });
 
   describe("multiple plugins", () => {

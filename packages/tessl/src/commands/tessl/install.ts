@@ -32,10 +32,6 @@ export default class TesslInstall extends Command {
       description:
         "Install tiles globally to ~/.tessl/ instead of the current project",
     }),
-    skill: Flags.string({
-      multiple: true,
-      description: "Select specific skills to install from GitHub repositories",
-    }),
     yes: Flags.boolean({
       description: "Skip confirmation prompts and auto-select all skills",
     }),
@@ -58,7 +54,6 @@ export default class TesslInstall extends Command {
 
     const extraArgs: string[] = [];
     if (flags.global) extraArgs.push("--global");
-    for (const skill of flags.skill ?? []) extraArgs.push("--skill", skill);
     if (flags.yes) extraArgs.push("--yes");
     if (flags.verbose) extraArgs.push("--verbose");
     if (flags["accept-warnings"]) extraArgs.push("--accept-warnings");

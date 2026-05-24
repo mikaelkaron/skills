@@ -88,23 +88,6 @@ describe("tessl install", () => {
       assert.match(lastArgs(), /--accept-warnings/);
     });
 
-    it("forwards --skill flag", async () => {
-      makeFakeTessl();
-      await runCommand(["tessl:install", "tessl", "--skill", "my-skill"], {
-        root,
-      });
-      assert.match(lastArgs(), /--skill my-skill/);
-    });
-
-    it("forwards multiple --skill flags", async () => {
-      makeFakeTessl();
-      await runCommand(
-        ["tessl:install", "tessl", "--skill", "a", "--skill", "b"],
-        { root },
-      );
-      assert.match(lastArgs(), /--skill a --skill b/);
-    });
-
     it("forwards --agent flag", async () => {
       makeFakeTessl();
       await runCommand(["tessl:install", "tessl", "--agent", "claude-code"], {
