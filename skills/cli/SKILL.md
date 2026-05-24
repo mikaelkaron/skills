@@ -38,6 +38,18 @@ mks plugins:install tessl
 mks plugins:uninstall cherry-pick-filter
 ```
 
+After installing, confirm the plugin appears in the list:
+
+```bash
+mks plugins
+```
+
+After uninstalling, confirm the plugin is no longer listed:
+
+```bash
+mks plugins
+```
+
 **Errors:**
 
 - `Error: mks CLI not found.` — CLI is not installed; run `npm install -g @mikaelkaron/skills`
