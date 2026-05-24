@@ -6,8 +6,11 @@ export function install(
   cmd = process.env["TESSL_CMD"] ??
     which.sync("tessl", { nothrow: true }) ??
     "tessl",
+  extraArgs: string[] = [],
 ): void {
-  const result = spawnSync(cmd, ["install", tile], { stdio: "inherit" });
+  const result = spawnSync(cmd, ["install", tile, ...extraArgs], {
+    stdio: "inherit",
+  });
 
   if (result.error) {
     throw new Error(
