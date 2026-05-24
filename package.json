@@ -1,6 +1,6 @@
 {
   "name": "@mikaelkaron/skills",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "bin": {
     "mks": "bin/run.js"
   },
@@ -16,6 +16,7 @@
   },
   "scripts": {
     "build": "tsc -b",
+    "prepublishOnly": "npm run build",
     "pretest": "npm run build",
     "test": "node --experimental-strip-types --test 'packages/*/test/**/*.test.ts'",
     "test:types": "tsc -p tsconfig.test.json",
@@ -23,7 +24,7 @@
     "format": "oxfmt ."
   },
   "dependencies": {
-    "@mikaelkaron/skills-cli": "^0.4.3"
+    "@mikaelkaron/skills-cli": "^0.4.4"
   },
   "devDependencies": {
     "oxfmt": "^0.51.0",

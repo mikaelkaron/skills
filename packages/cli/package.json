@@ -1,6 +1,6 @@
 {
   "name": "@mikaelkaron/skills-cli",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "bin": {
     "mks": "bin/run.js"
   },
@@ -35,5 +35,9 @@
   },
   "engines": {
     "node": ">=22.18"
+  },
+  "tessl": {
+    "tile": "mikaelkaron/cli",
+    "version": "0.2.0"
   }
 }
