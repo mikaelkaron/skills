@@ -1,6 +1,6 @@
 {
   "name": "@mikaelkaron/skills-cherry-pick-filter",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "bin": {
     "mks-cherry-pick-filter": "bin/run.js"
   },
