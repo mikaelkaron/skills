@@ -8,7 +8,7 @@ type PluginPjson = {
 
 export default class TesslInstall extends Command {
   static override summary =
-    "Install the tessl skill tile for an installed plugin.";
+    "Install tessl skill tiles for one or more installed plugins.";
 
   static override examples = [
     {

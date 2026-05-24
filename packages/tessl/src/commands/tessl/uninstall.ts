@@ -8,7 +8,7 @@ type PluginPjson = {
 
 export default class TesslUninstall extends Command {
   static override summary =
-    "Uninstall the tessl skill tile for an installed plugin.";
+    "Uninstall tessl skill tiles for one or more installed plugins.";
 
   static override examples = [
     {
