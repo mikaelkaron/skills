@@ -76,6 +76,13 @@ describe("install", () => {
     assert.match(lastArgs, /install mikaelkaron\/tessl@0\.1\.0/);
   });
 
+  it("forwards extra args to tessl", () => {
+    makeFakeTessl(0);
+    install("some/tile", undefined, ["--force", "--verbose"]);
+    const lastArgs = readFileSync(`${tmpDir}/last-args`, "utf8").trim();
+    assert.match(lastArgs, /install some\/tile --force --verbose/);
+  });
+
   it("uses TESSL_CMD env var when set", () => {
     makeFakeTessl(0);
     install("some/tile");
