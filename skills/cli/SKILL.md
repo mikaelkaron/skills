@@ -23,19 +23,19 @@ If `mks` is not found, output: `Error: mks CLI not found. Install it with: npm i
 ## Plugin management
 
 ```bash
-mks plugins                                      # list installed plugins
-mks plugins install <plugin>                     # install a plugin
-mks plugins update                               # update all installed plugins
-mks plugins uninstall <plugin>                   # uninstall a plugin
-mks plugins link <dir>                           # link a local plugin directory (dev)
+mks plugins                                       # list installed plugins
+mks plugins:install <plugin>                      # install a plugin
+mks plugins:update                                # update all installed plugins
+mks plugins:uninstall <plugin>                    # uninstall a plugin
+mks plugins:link <dir>                            # link a local plugin directory (dev)
 ```
 
 The CLI scope is `mikaelkaron` and pluginPrefix is `skills`, so plugins can be installed by short name:
 
 ```bash
-mks plugins install cherry-pick-filter
-mks plugins install tessl
-mks plugins uninstall cherry-pick-filter
+mks plugins:install cherry-pick-filter
+mks plugins:install tessl
+mks plugins:uninstall cherry-pick-filter
 ```
 
 **Errors:**
