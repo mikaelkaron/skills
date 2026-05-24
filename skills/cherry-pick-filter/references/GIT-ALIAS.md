@@ -13,3 +13,11 @@ Use `--global` to register the alias for all repositories on this machine:
 ```bash
 git config --global alias.cherry-pick-filter '!mks cherry-pick-filter'
 ```
+
+## Usage
+
+Once registered, all `mks cherry-pick-filter` invocations can be replaced with `git cherry-pick-filter`:
+
+```bash
+git cherry-pick-filter <target-branch> --filter <prefix> [--filter <prefix>...] [--dry-run]
+```

@@ -25,16 +25,8 @@ Optionally register a git alias for a shorter invocation — see [GIT-ALIAS.md](
 
 ## Usage
 
-Via the mks CLI:
-
 ```bash
 mks cherry-pick-filter <target-branch> --filter <prefix> [--filter <prefix>...] [--dry-run]
-```
-
-Or via the [git alias](references/GIT-ALIAS.md) (if registered):
-
-```bash
-git cherry-pick-filter <target-branch> --filter <prefix> [--filter <prefix>...] [--dry-run]
 ```
 
 | Argument            | Required         | Description                                                        |
