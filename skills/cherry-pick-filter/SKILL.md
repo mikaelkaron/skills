@@ -21,11 +21,7 @@ npm install -g @mikaelkaron/skills
 mks plugins install cherry-pick-filter
 ```
 
-Optionally register a git alias for a shorter invocation:
-
-```bash
-git config alias.cherry-pick-filter '!mks cherry-pick-filter'
-```
+Optionally register a git alias for a shorter invocation — see [GIT-ALIAS.md](references/GIT-ALIAS.md).
 
 ## Usage
 
@@ -35,7 +31,7 @@ Via the mks CLI:
 mks cherry-pick-filter <target-branch> --filter <prefix> [--filter <prefix>...] [--dry-run]
 ```
 
-Or via the git alias (if registered):
+Or via the [git alias](references/GIT-ALIAS.md) (if registered):
 
 ```bash
 git cherry-pick-filter <target-branch> --filter <prefix> [--filter <prefix>...] [--dry-run]
