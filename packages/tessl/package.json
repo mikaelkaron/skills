@@ -19,11 +19,13 @@
     "test:types": "tsc -p test/tsconfig.json"
   },
   "dependencies": {
-    "@oclif/core": "^4"
+    "@oclif/core": "^4",
+    "which": "^7.0.0"
   },
   "devDependencies": {
     "@oclif/test": "^4.1.18",
     "@types/node": "^22",
+    "@types/which": "^3.0.4",
     "typescript": "^5"
   },
   "oclif": {
