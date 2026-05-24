@@ -12,7 +12,7 @@ import {
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import which from "which";
-import { install } from "../../src/lib/tessl.ts";
+import { install, uninstall } from "../../src/lib/tessl.ts";
 
 const tesslBin = which.sync("tessl", { nothrow: true });
 
@@ -29,15 +29,20 @@ after(() => rmSync(tmpDir, { recursive: true, force: true }));
 afterEach(() => {
   delete process.env["TESSL_CMD"];
   process.exitCode = undefined;
+  if (existsSync(`${tmpDir}/last-args`)) rmSync(`${tmpDir}/last-args`);
 });
 
-function makeFakeTessl(exitCode: number) {
+function makeFakeTessl(exitCode = 0) {
   writeFileSync(
     fakeTessl,
     `#!/bin/sh\necho "$@" >> "${tmpDir}/last-args"\nexit ${exitCode}\n`,
   );
   chmodSync(fakeTessl, 0o755);
   process.env["TESSL_CMD"] = fakeTessl;
+}
+
+function lastArgs(): string {
+  return readFileSync(`${tmpDir}/last-args`, "utf8").trim();
 }
 
 describe("install", () => {
@@ -72,22 +77,19 @@ describe("install", () => {
   it("passes tile ref as argument to tessl", () => {
     makeFakeTessl(0);
     install("mikaelkaron/tessl@0.1.0");
-    const lastArgs = readFileSync(`${tmpDir}/last-args`, "utf8").trim();
-    assert.match(lastArgs, /install mikaelkaron\/tessl@0\.1\.0/);
+    assert.match(lastArgs(), /install mikaelkaron\/tessl@0\.1\.0/);
   });
 
   it("forwards extra args to tessl", () => {
     makeFakeTessl(0);
     install("some/tile", undefined, ["--force", "--verbose"]);
-    const lastArgs = readFileSync(`${tmpDir}/last-args`, "utf8").trim();
-    assert.match(lastArgs, /install some\/tile --force --verbose/);
+    assert.match(lastArgs(), /install some\/tile --force --verbose/);
   });
 
   it("uses TESSL_CMD env var when set", () => {
     makeFakeTessl(0);
     install("some/tile");
-    const lastArgs = readFileSync(`${tmpDir}/last-args`, "utf8").trim();
-    assert.ok(lastArgs.length > 0);
+    assert.ok(lastArgs().length > 0);
   });
 
   describe("real tessl", () => {
@@ -120,5 +122,47 @@ describe("install", () => {
         );
       },
     );
+  });
+});
+
+describe("uninstall", () => {
+  it("throws when tessl is not found (ENOENT)", () => {
+    assert.throws(
+      () => uninstall("some/tile", "/nonexistent/path/to/tessl"),
+      /tessl CLI not found/,
+    );
+  });
+
+  it("exits with tessl exit code on failure", () => {
+    makeFakeTessl(2);
+    let exited: number | undefined;
+    const orig = process.exit.bind(process);
+    // @ts-expect-error overriding process.exit for test
+    process.exit = (code?: number) => {
+      exited = code;
+    };
+    try {
+      uninstall("some/tile");
+    } finally {
+      process.exit = orig;
+    }
+    assert.equal(exited, 2);
+  });
+
+  it("resolves without error when tessl exits 0", () => {
+    makeFakeTessl(0);
+    assert.doesNotThrow(() => uninstall("some/tile"));
+  });
+
+  it("passes tile ref as argument to tessl", () => {
+    makeFakeTessl(0);
+    uninstall("some/tile");
+    assert.match(lastArgs(), /uninstall some\/tile/);
+  });
+
+  it("forwards extra args to tessl", () => {
+    makeFakeTessl(0);
+    uninstall("some/tile", undefined, ["--global"]);
+    assert.match(lastArgs(), /uninstall some\/tile --global/);
   });
 });
