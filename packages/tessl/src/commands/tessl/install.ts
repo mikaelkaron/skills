@@ -1,4 +1,4 @@
-import { Args, Command } from "@oclif/core";
+import { Args, Command, Flags } from "@oclif/core";
 import { install } from "../../lib/tessl.js";
 
 type PluginPjson = {
@@ -17,8 +17,6 @@ export default class TesslInstall extends Command {
     },
   ];
 
-  static override strict = false;
-
   static override args = {
     plugin: Args.string({
       description: "Installed plugin name whose tile should be installed",
@@ -26,9 +24,36 @@ export default class TesslInstall extends Command {
     }),
   };
 
+  static override flags = {
+    global: Flags.boolean({
+      char: "g",
+      description: "Install tiles globally to ~/.tessl/ instead of the current project",
+    }),
+    skill: Flags.string({
+      multiple: true,
+      description: "Select specific skills to install from GitHub repositories",
+    }),
+    yes: Flags.boolean({
+      description: "Skip confirmation prompts and auto-select all skills",
+    }),
+    verbose: Flags.boolean({
+      char: "v",
+      description: "Show detailed warning messages during installation",
+    }),
+    "watch-local": Flags.boolean({
+      description: "Watch local file-source tiles and reinstall on changes",
+    }),
+    "accept-warnings": Flags.boolean({
+      description: "Pre-accept install policy warnings (no interactive prompt)",
+    }),
+    agent: Flags.string({
+      multiple: true,
+      description: "Override agents to install for",
+    }),
+  };
+
   async run(): Promise<void> {
-    const { args, argv } = await this.parse(TesslInstall);
-    const extraArgs = (argv as string[]).slice(1);
+    const { args, flags } = await this.parse(TesslInstall);
 
     const plugin = [...this.config.plugins.values()].find(
       (p) => (p.pjson as PluginPjson).oclif?.id === args.plugin,
@@ -49,6 +74,15 @@ export default class TesslInstall extends Command {
     const tileRef = tesslPjson.version
       ? `${tesslPjson.tile}@${tesslPjson.version}`
       : tesslPjson.tile;
+
+    const extraArgs: string[] = [];
+    if (flags.global) extraArgs.push("--global");
+    for (const skill of flags.skill ?? []) extraArgs.push("--skill", skill);
+    if (flags.yes) extraArgs.push("--yes");
+    if (flags.verbose) extraArgs.push("--verbose");
+    if (flags["watch-local"]) extraArgs.push("--watch-local");
+    if (flags["accept-warnings"]) extraArgs.push("--accept-warnings");
+    for (const agent of flags.agent ?? []) extraArgs.push("--agent", agent);
 
     try {
       install(tileRef, undefined, extraArgs);
