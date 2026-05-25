@@ -20,6 +20,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npm install -g @tessl/cli
       - run: npm run build
       - run: npm run test:coverage
       - name: Post coverage to PR
