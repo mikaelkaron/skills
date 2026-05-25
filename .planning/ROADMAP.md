@@ -62,7 +62,7 @@ Plans:
 Plans:
 **Wave 0**
 
-- [ ] 02-00-PLAN.md — TDD Wave 0: install js-yaml devDep + write test/workflows.test.ts with RED structural assertions (GHA-01..GHA-09, CI-01..CI-03)
+- [x] 02-00-PLAN.md — TDD Wave 0: install js-yaml devDep + write test/workflows.test.ts with RED structural assertions (GHA-01..GHA-09, CI-01..CI-03)
 
 **Wave 1** _(blocked on Wave 0 completion)_
 
@@ -80,4 +80,4 @@ Phases execute in numeric order: 1 → 2
 | Phase             | Plans Complete | Status      | Completed  |
 | ----------------- | -------------- | ----------- | ---------- |
 | 1. Release Config | 4/4            | Complete    | 2026-05-25 |
-| 2. GitHub Actions | 0/3            | Not started | -          |
+| 2. GitHub Actions | 1/3 | In Progress|  |
