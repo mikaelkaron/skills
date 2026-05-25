@@ -18,17 +18,29 @@
     "build": "tsc -b",
     "prepublishOnly": "npm run build",
     "pretest": "npm run build",
-    "test": "node --experimental-strip-types --test 'packages/*/test/**/*.test.ts'",
+    "test": "node --experimental-strip-types --test 'packages/*/test/**/*.test.ts' 'test/**/*.test.ts'",
     "test:types": "tsc -p tsconfig.test.json",
     "lint": "oxlint .",
     "format": "oxfmt ."
   },
   "dependencies": {
-    "@mikaelkaron/skills-cli": "^0.5.0"
+    "@mikaelkaron/skills-cli": "^0.5.0",
+    "@oclif/core": "^4",
+    "@oclif/plugin-plugins": "^5"
   },
   "devDependencies": {
     "oxfmt": "^0.51.0",
     "oxlint": "^1.66.0"
+  },
+  "oclif": {
+    "bin": "mks",
+    "dirname": "mikaelkaron/skills",
+    "pluginPrefix": "skills",
+    "plugins": [
+      "@oclif/plugin-plugins",
+      "@mikaelkaron/skills-cli"
+    ],
+    "scope": "mikaelkaron"
   },
   "engines": {
     "node": ">=22.18"

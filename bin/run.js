@@ -1,3 +1,4 @@
 #!/usr/bin/env node
 
-import "@mikaelkaron/skills-cli/bin/run.js";
+import { execute } from "@oclif/core";
+await execute({ dir: import.meta.url });

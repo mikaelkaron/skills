@@ -27,6 +27,7 @@
   "oclif": {
     "bin": "mks",
     "dirname": "mikaelkaron/skills",
+    "id": "cli",
     "pluginPrefix": "skills",
     "plugins": [
       "@oclif/plugin-plugins"
