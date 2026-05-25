@@ -79,5 +79,7 @@ export default {
     { name: "rc", channel: "rc", prerelease: "rc" },
   ],
   tagFormat: "v${version}",
-  plugins: allPlugins.filter(buildSkipFilter()),
+  get plugins() {
+    return allPlugins.filter(buildSkipFilter());
+  },
 };
