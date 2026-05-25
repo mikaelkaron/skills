@@ -46,6 +46,9 @@ export const allPlugins = [
     prepareCmd:
       "node scripts/set-workspace-versions.mjs ${nextRelease.version}",
   }),
+  withId("@semantic-release/exec", "update-lockfile", {
+    prepareCmd: "npm install --package-lock-only",
+  }),
   withId("@semantic-release/exec", "build", { prepareCmd: "npm run build" }),
   withId("@semantic-release/npm", ".", {
     pkgRoot: ".",
