@@ -1,5 +1,14 @@
 import { Args, Command, Flags } from "@oclif/core";
-import { exec, tryExec } from "../lib/git.js";
+import {
+  checkout,
+  cherryPick,
+  diffTree,
+  log,
+  lsRemote,
+  revParse,
+  showRef,
+  tryCheckout,
+} from "../lib/git.js";
 
 function out(sha: string): void {
   if (!process.stdout.isTTY) process.stdout.write(sha + "\n");
@@ -61,32 +70,33 @@ All human-readable output goes to stderr. stdout emits one picked commit SHA per
     const filters = flags.filter;
     const dryRun = flags["dry-run"];
 
-    const currentBranch = exec("git rev-parse --abbrev-ref HEAD");
+    const currentBranch = revParse(["--abbrev-ref", "HEAD"]);
 
     if (currentBranch === targetBranch) {
       this.error(`already on '${targetBranch}'.`, { exit: 1 });
     }
 
-    const localExists = tryExec(
-      `git show-ref --verify --quiet refs/heads/${targetBranch}`,
-    ).ok;
+    const localExists = showRef([
+      "--verify",
+      "--quiet",
+      `refs/heads/${targetBranch}`,
+    ]).ok;
 
     if (!localExists) {
-      const remoteResult = tryExec(
-        `git ls-remote --heads origin ${targetBranch}`,
-      );
+      const remoteResult = lsRemote(["--heads", "origin", targetBranch]);
       if (remoteResult.ok && remoteResult.output.length > 0) {
         this.logToStderr(`Checking out '${targetBranch}' from origin...`);
-        const checkoutResult = tryExec(
-          `git checkout --track origin/${targetBranch}`,
-        );
+        const checkoutResult = tryCheckout([
+          "--track",
+          `origin/${targetBranch}`,
+        ]);
         if (!checkoutResult.ok) {
           this.logToStderr(checkoutResult.output);
           this.error(`failed to checkout '${targetBranch}' from origin.`, {
             exit: 1,
           });
         }
-        exec(`git checkout ${currentBranch}`);
+        checkout([currentBranch]);
       } else {
         this.error(`branch '${targetBranch}' not found locally or on origin.`, {
           exit: 1,
@@ -100,10 +110,14 @@ All human-readable output goes to stderr. stdout emits one picked commit SHA per
     );
     this.logToStderr(`Filter prefixes: ${filters.join(", ")}\n`);
 
-    const pathspecs = filters.map((f) => `:!${f}`).join(" ");
-    const logOutput = tryExec(
-      `git log ${targetBranch}..HEAD --reverse --format="%H %s" -- ${pathspecs}`,
-    );
+    const pathspecs = filters.map((f: string) => `:!${f}`);
+    const logOutput = log([
+      `${targetBranch}..HEAD`,
+      "--reverse",
+      "--format=%H %s",
+      "--",
+      ...pathspecs,
+    ]);
 
     if (!logOutput.ok || !logOutput.output) {
       this.logToStderr("Already up to date.");
@@ -113,7 +127,10 @@ All human-readable output goes to stderr. stdout emits one picked commit SHA per
     const candidates = logOutput.output
       .split("\n")
       .filter(Boolean)
-      .map((line) => ({ sha: line.slice(0, 40), subject: line.slice(41) }));
+      .map((line: string) => ({
+        sha: line.slice(0, 40),
+        subject: line.slice(41),
+      }));
 
     if (candidates.length === 0) {
       this.logToStderr("Already up to date.");
@@ -128,14 +145,14 @@ All human-readable output goes to stderr. stdout emits one picked commit SHA per
     }> = [];
 
     for (const { sha, subject } of candidates) {
-      const files = exec(`git diff-tree --no-commit-id -r --name-only ${sha}`)
+      const files = diffTree(["--no-commit-id", "-r", "--name-only", sha])
         .split("\n")
         .filter(Boolean);
-      const filteredFiles = files.filter((f) =>
-        filters.some((prefix) => f.startsWith(prefix)),
+      const filteredFiles = files.filter((f: string) =>
+        filters.some((prefix: string) => f.startsWith(prefix)),
       );
       const codeFiles = files.filter(
-        (f) => !filters.some((prefix) => f.startsWith(prefix)),
+        (f: string) => !filters.some((prefix: string) => f.startsWith(prefix)),
       );
       if (filteredFiles.length > 0 && codeFiles.length > 0) {
         mixed.push({ sha, subject, filteredFiles, codeFiles });
@@ -155,7 +172,7 @@ All human-readable output goes to stderr. stdout emits one picked commit SHA per
       this.logToStderr(`Split each commit with:`);
       this.logToStderr(`  git rebase -i ${mixed[0].sha.slice(0, 9)}^\n`);
       this.logToStderr(
-        `Then re-run: git cherry-pick-filter ${targetBranch} ${filters.map((f) => `--filter ${f}`).join(" ")}`,
+        `Then re-run: git cherry-pick-filter ${targetBranch} ${filters.map((f: string) => `--filter ${f}`).join(" ")}`,
       );
       this.error(
         `${mixed.length} mixed commit(s) detected — split before syncing.`,
@@ -177,11 +194,11 @@ All human-readable output goes to stderr. stdout emits one picked commit SHA per
       return;
     }
 
-    exec(`git checkout ${targetBranch}`);
+    checkout([targetBranch]);
 
     let picked = 0;
     for (const { sha, subject } of candidates) {
-      const result = tryExec(`git cherry-pick ${sha}`);
+      const result = cherryPick([sha]);
       if (result.ok) {
         this.logToStderr(`  pick ${sha.slice(0, 9)} ${subject}`);
         out(sha);
@@ -196,7 +213,7 @@ All human-readable output goes to stderr. stdout emits one picked commit SHA per
       }
     }
 
-    exec(`git checkout ${currentBranch}`);
+    checkout([currentBranch]);
     this.logToStderr(`\nDone: ${picked} picked`);
   }
 }
