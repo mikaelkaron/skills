@@ -4,7 +4,7 @@ import { loadWorkspaceTree } from "./lib/workspace.mjs";
 
 const version = process.argv[2];
 if (!version) throw new Error("Usage: set-workspace-versions.mjs <version>");
-if (!/^\d+\.\d+\.\d+/.test(version))
+if (!/^\d+\.\d+\.\d+(-[\w.]+)?(\+[\w.]+)?$/.test(version))
   throw new Error(`Invalid version: ${version}`);
 
 const tree = await loadWorkspaceTree();
