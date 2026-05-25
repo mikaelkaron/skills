@@ -66,7 +66,7 @@ Plans:
 
 **Wave 1** _(blocked on Wave 0 completion)_
 
-- [ ] 02-01-PLAN.md — Author .github/workflows/release.yml: two-job setup→release pattern, SEMREL_SKIP_STEPS assembly, branch guard, permissions (GHA-01..GHA-09)
+- [x] 02-01-PLAN.md — Author .github/workflows/release.yml: two-job setup→release pattern, SEMREL_SKIP_STEPS assembly, branch guard, permissions (GHA-01..GHA-09)
 
 **Wave 2** _(blocked on Wave 1 completion)_
 
@@ -80,4 +80,4 @@ Phases execute in numeric order: 1 → 2
 | Phase             | Plans Complete | Status      | Completed  |
 | ----------------- | -------------- | ----------- | ---------- |
 | 1. Release Config | 4/4            | Complete    | 2026-05-25 |
-| 2. GitHub Actions | 1/3 | In Progress|  |
+| 2. GitHub Actions | 2/3 | In Progress|  |
