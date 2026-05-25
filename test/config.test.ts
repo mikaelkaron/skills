@@ -13,12 +13,20 @@ function findPkgRoot(dir: string): string {
 
 const root = findPkgRoot(dirname(fileURLToPath(import.meta.url)));
 
-describe("@mikaelkaron/skills-cli oclif config", () => {
+describe("@mikaelkaron/skills oclif config", () => {
   it("loads @oclif/plugin-plugins as a core plugin", async () => {
     const config = await Config.load({ root });
     assert.ok(
       config.plugins.has("@oclif/plugin-plugins"),
       "expected @oclif/plugin-plugins to be a core plugin",
+    );
+  });
+
+  it("loads @mikaelkaron/skills-cli as a core plugin", async () => {
+    const config = await Config.load({ root });
+    assert.ok(
+      config.plugins.has("@mikaelkaron/skills-cli"),
+      "expected @mikaelkaron/skills-cli to be a core plugin",
     );
   });
 
