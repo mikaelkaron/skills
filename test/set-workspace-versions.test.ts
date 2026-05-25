@@ -1,9 +1,9 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-
-// Test the version validation regex independently (mirrors the guard in
-// scripts/set-workspace-versions.mjs so changes to one surface failures here)
-const VERSION_REGEX = /^\d+\.\d+\.\d+(-[\w.]+)?(\+[\w.]+)?$/;
+import {
+  VERSION_REGEX,
+  applyWorkspaceVersions,
+} from "../scripts/lib/versions.mjs";
 
 describe("version validation regex", () => {
   it("accepts a clean semver string", () => {
@@ -49,26 +49,7 @@ describe("version validation regex", () => {
   });
 });
 
-// Test the intra-workspace dependency update logic independently
 describe("intra-workspace dependency update logic", () => {
-  function applyWorkspaceVersions(
-    pkg: {
-      version?: string;
-      dependencies?: Record<string, string>;
-      devDependencies?: Record<string, string>;
-    },
-    workspaceNames: string[],
-    version: string,
-  ) {
-    pkg.version = version;
-    for (const name of workspaceNames) {
-      if (pkg.dependencies?.[name]) pkg.dependencies[name] = `^${version}`;
-      if (pkg.devDependencies?.[name])
-        pkg.devDependencies[name] = `^${version}`;
-    }
-    return pkg;
-  }
-
   it("updates the package version field", () => {
     const pkg = { version: "0.1.0" };
     applyWorkspaceVersions(pkg, [], "1.2.3");
