@@ -1,6 +1,11 @@
 {
   "name": "@mikaelkaron/skills-cherry-pick-filter",
   "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikaelkaron/skills",
+    "directory": "packages/cherry-pick-filter"
+  },
   "bin": {
     "mks-cherry-pick-filter": "bin/run.js"
   },

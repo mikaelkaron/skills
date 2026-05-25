@@ -1,6 +1,10 @@
 {
   "name": "@mikaelkaron/skills",
   "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikaelkaron/skills"
+  },
   "bin": {
     "mks": "bin/run.js"
   },

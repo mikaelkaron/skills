@@ -1,6 +1,11 @@
 {
   "name": "@mikaelkaron/skills-tessl",
   "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikaelkaron/skills",
+    "directory": "packages/tessl"
+  },
   "bin": {
     "mks-tessl": "bin/run.js"
   },
