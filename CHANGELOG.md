@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/mikaelkaron/skills/compare/v1.0.0...v1.0.1) (2026-05-25)
+
+
+### Bug Fixes
+
+* add repository field to all package.json files for npm provenance ([808ffe1](https://github.com/mikaelkaron/skills/commit/808ffe1b534b7ee222add5ddcc0ab8b5b3d2c94c))
+
 # 1.0.0 (2026-05-25)
 
 ### Bug Fixes

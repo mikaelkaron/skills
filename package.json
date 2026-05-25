@@ -1,6 +1,6 @@
 {
   "name": "@mikaelkaron/skills",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/mikaelkaron/skills"
@@ -32,7 +32,7 @@
     "format": "oxfmt ."
   },
   "dependencies": {
-    "@mikaelkaron/skills-cli": "^1.0.0",
+    "@mikaelkaron/skills-cli": "^1.0.1",
     "@oclif/core": "^4",
     "@oclif/plugin-plugins": "^5",
     "which": "^7.0.0"
