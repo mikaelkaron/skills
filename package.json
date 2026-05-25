@@ -8,7 +8,8 @@
     "packages/*"
   ],
   "files": [
-    "bin"
+    "bin",
+    "oclif.manifest.json"
   ],
   "type": "module",
   "publishConfig": {
@@ -16,7 +17,8 @@
   },
   "scripts": {
     "build": "tsc -b",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm run build && oclif manifest .",
+    "postpublish": "rm -f oclif.manifest.json",
     "pretest": "npm run build",
     "test": "node --experimental-strip-types --test 'packages/*/test/**/*.test.ts' 'test/**/*.test.ts'",
     "test:coverage": "node --experimental-strip-types --experimental-test-coverage --test 'packages/*/test/**/*.test.ts' 'test/**/*.test.ts'",
@@ -30,6 +32,7 @@
     "@oclif/plugin-plugins": "^5"
   },
   "devDependencies": {
+    "oclif": "^4",
     "oxfmt": "^0.51.0",
     "oxlint": "^1.66.0"
   },
