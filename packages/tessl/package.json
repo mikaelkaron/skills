@@ -19,6 +19,7 @@
     "postpublish": "rm -f oclif.manifest.json",
     "pretest": "npm run build",
     "test": "node --experimental-strip-types --test 'test/**/*.test.ts'",
+    "test:coverage": "node --experimental-strip-types --experimental-test-coverage --test 'test/**/*.test.ts'",
     "test:types": "tsc -p test/tsconfig.json"
   },
   "dependencies": {

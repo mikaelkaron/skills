@@ -19,6 +19,7 @@
     "prepublishOnly": "npm run build",
     "pretest": "npm run build",
     "test": "node --experimental-strip-types --test 'packages/*/test/**/*.test.ts' 'test/**/*.test.ts'",
+    "test:coverage": "node --experimental-strip-types --experimental-test-coverage --test 'packages/*/test/**/*.test.ts' 'test/**/*.test.ts'",
     "test:types": "tsc -p tsconfig.test.json",
     "lint": "oxlint .",
     "format": "oxfmt ."
