@@ -30,5 +30,10 @@ for (const [, pkgPath] of tree.workspaces) {
   const pkgJsonPath = join(pkgPath, "package.json");
   const pkg = JSON.parse(await readFile(pkgJsonPath, "utf8"));
   pkg.version = version;
+  // Also bump any sibling workspace deps listed in this package
+  for (const [name] of tree.workspaces) {
+    if (pkg.dependencies?.[name]) pkg.dependencies[name] = `^${version}`;
+    if (pkg.devDependencies?.[name]) pkg.devDependencies[name] = `^${version}`;
+  }
   await writeFile(pkgJsonPath, JSON.stringify(pkg, null, 2) + "\n");
 }
