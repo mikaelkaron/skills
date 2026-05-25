@@ -5,7 +5,8 @@ import { VERSION_REGEX, applyWorkspaceVersions } from "./lib/versions.mjs";
 
 const version = process.argv[2];
 if (!version) throw new Error("Usage: set-workspace-versions.mjs <version>");
-if (!VERSION_REGEX.test(version)) throw new Error(`Invalid version: ${version}`);
+if (!VERSION_REGEX.test(version))
+  throw new Error(`Invalid version: ${version}`);
 
 const tree = await loadWorkspaceTree();
 const workspaceNames = [...tree.workspaces.keys()];
