@@ -73,7 +73,7 @@ export const allPlugins = [
     message:
       "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}\n\n[skip ci]",
   }),
-  withId("@semantic-release/github"),
+  withId("@semantic-release/github", undefined),
 ];
 
 export default {
