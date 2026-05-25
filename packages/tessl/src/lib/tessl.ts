@@ -40,3 +40,7 @@ export function uninstall(
 ): void {
   run(["uninstall", tile, ...extraArgs], cmd);
 }
+
+export function list(cmd?: string, extraArgs: string[] = []): void {
+  run(["list", ...extraArgs], cmd);
+}
