@@ -9,18 +9,18 @@ export function stepId(name, suffix) {
 // options object that semantic-release passes to plugin lifecycle functions
 const stepIds = new Map();
 
-// Build a filter function that removes plugins whose stepId matches SEMREL_SKIP_STEPS regex
+// Escape regex metacharacters in a string so it can be used as a literal match
+function escapeRegex(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+// Build a filter function that removes plugins whose stepId matches SEMREL_SKIP_STEPS
+// Each pipe-separated segment is treated as a literal step ID (not a raw regex pattern)
 export function buildSkipFilter() {
   const skipPattern = env.SEMREL_SKIP_STEPS;
   if (!skipPattern) return () => true; // keep all
-  let regex;
-  try {
-    regex = new RegExp(skipPattern);
-  } catch (err) {
-    throw new Error(
-      `SEMREL_SKIP_STEPS contains an invalid regex pattern "${skipPattern}": ${err.message}`,
-    );
-  }
+  const parts = skipPattern.split("|").map(escapeRegex);
+  const regex = new RegExp(`^(${parts.join("|")})$`);
   return (entry) => {
     if (!Array.isArray(entry)) return true;
     const id = stepIds.get(entry);
