@@ -30,6 +30,7 @@ describe("release.yml", () => {
   it("GHA-02: has boolean skip inputs for each skippable step", () => {
     const inputs = (releaseYml.on as any).workflow_dispatch.inputs;
     const expected = [
+      "skip_changelog",
       "skip_install",
       "skip_set_workspace_versions",
       "skip_build",

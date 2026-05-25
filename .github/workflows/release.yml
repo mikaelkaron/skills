@@ -35,6 +35,10 @@ on:
         description: "Skip step: @semantic-release/git"
         type: boolean
         default: false
+      skip_changelog:
+        description: "Skip step: @semantic-release/changelog"
+        type: boolean
+        default: false
       skip_github:
         description: "Skip step: @semantic-release/github"
         type: boolean
@@ -49,6 +53,7 @@ jobs:
     steps:
       - id: assemble
         env:
+          SKIP_CHANGELOG: ${{ inputs.skip_changelog }}
           SKIP_INSTALL: ${{ inputs.skip_install }}
           SKIP_SET_WORKSPACE_VERSIONS: ${{ inputs.skip_set_workspace_versions }}
           SKIP_BUILD: ${{ inputs.skip_build }}
@@ -60,6 +65,7 @@ jobs:
           SKIP_GITHUB: ${{ inputs.skip_github }}
         run: |
           steps=()
+          [ "$SKIP_CHANGELOG" = "true" ] && steps+=("@semantic-release/changelog")
           [ "$SKIP_INSTALL" = "true" ] && steps+=("@semantic-release/exec:install")
           [ "$SKIP_SET_WORKSPACE_VERSIONS" = "true" ] && steps+=("@semantic-release/exec:set-workspace-versions")
           [ "$SKIP_BUILD" = "true" ] && steps+=("@semantic-release/exec:build")
