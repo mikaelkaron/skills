@@ -15,7 +15,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm run build && oclif manifest .",
+    "postpublish": "rm -f oclif.manifest.json",
     "pretest": "npm run build",
     "test": "node --experimental-strip-types --test 'test/**/*.test.ts'",
     "test:types": "tsc -p test/tsconfig.json"
@@ -26,6 +27,7 @@
   "devDependencies": {
     "@oclif/test": "^4.1.18",
     "@types/node": "^22",
+    "oclif": "^4",
     "typescript": "^5"
   },
   "oclif": {
