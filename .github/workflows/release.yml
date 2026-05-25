@@ -1,0 +1,88 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      skip_install:
+        description: "Skip step: @semantic-release/exec:install"
+        type: boolean
+        default: false
+      skip_set_workspace_versions:
+        description: "Skip step: @semantic-release/exec:set-workspace-versions"
+        type: boolean
+        default: false
+      skip_build:
+        description: "Skip step: @semantic-release/exec:build"
+        type: boolean
+        default: false
+      skip_root:
+        description: "Skip step: @semantic-release/npm:\\."
+        type: boolean
+        default: false
+      skip_cli:
+        description: "Skip step: @semantic-release/npm:packages/cli"
+        type: boolean
+        default: false
+      skip_cherry_pick_filter:
+        description: "Skip step: @semantic-release/npm:packages/cherry-pick-filter"
+        type: boolean
+        default: false
+      skip_tessl:
+        description: "Skip step: @semantic-release/npm:packages/tessl"
+        type: boolean
+        default: false
+      skip_git:
+        description: "Skip step: @semantic-release/git"
+        type: boolean
+        default: false
+      skip_github:
+        description: "Skip step: @semantic-release/github"
+        type: boolean
+        default: false
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      skip_steps: ${{ steps.assemble.outputs.skip_steps }}
+    steps:
+      - id: assemble
+        run: |
+          steps=()
+          [ "${{ inputs.skip_install }}" = "true" ] && steps+=("@semantic-release/exec:install")
+          [ "${{ inputs.skip_set_workspace_versions }}" = "true" ] && steps+=("@semantic-release/exec:set-workspace-versions")
+          [ "${{ inputs.skip_build }}" = "true" ] && steps+=("@semantic-release/exec:build")
+          [ "${{ inputs.skip_root }}" = "true" ] && steps+=("@semantic-release/npm:\\.")
+          [ "${{ inputs.skip_cli }}" = "true" ] && steps+=("@semantic-release/npm:packages/cli")
+          [ "${{ inputs.skip_cherry_pick_filter }}" = "true" ] && steps+=("@semantic-release/npm:packages/cherry-pick-filter")
+          [ "${{ inputs.skip_tessl }}" = "true" ] && steps+=("@semantic-release/npm:packages/tessl")
+          [ "${{ inputs.skip_git }}" = "true" ] && steps+=("@semantic-release/git")
+          [ "${{ inputs.skip_github }}" = "true" ] && steps+=("@semantic-release/github")
+          echo "skip_steps=$(IFS='|'; echo "${steps[*]}")" >> $GITHUB_OUTPUT
+
+  release:
+    needs: setup
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/pre' || github.ref == 'refs/heads/alpha' || github.ref == 'refs/heads/beta' || startsWith(github.ref, 'refs/heads/rc')
+    runs-on: ubuntu-latest
+    concurrency:
+      group: release-${{ github.ref }}
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          SEMREL_SKIP_STEPS: ${{ needs.setup.outputs.skip_steps }}
