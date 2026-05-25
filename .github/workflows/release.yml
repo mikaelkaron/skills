@@ -48,17 +48,27 @@ jobs:
       skip_steps: ${{ steps.assemble.outputs.skip_steps }}
     steps:
       - id: assemble
+        env:
+          SKIP_INSTALL: ${{ inputs.skip_install }}
+          SKIP_SET_WORKSPACE_VERSIONS: ${{ inputs.skip_set_workspace_versions }}
+          SKIP_BUILD: ${{ inputs.skip_build }}
+          SKIP_ROOT: ${{ inputs.skip_root }}
+          SKIP_CLI: ${{ inputs.skip_cli }}
+          SKIP_CHERRY_PICK_FILTER: ${{ inputs.skip_cherry_pick_filter }}
+          SKIP_TESSL: ${{ inputs.skip_tessl }}
+          SKIP_GIT: ${{ inputs.skip_git }}
+          SKIP_GITHUB: ${{ inputs.skip_github }}
         run: |
           steps=()
-          [ "${{ inputs.skip_install }}" = "true" ] && steps+=("@semantic-release/exec:install")
-          [ "${{ inputs.skip_set_workspace_versions }}" = "true" ] && steps+=("@semantic-release/exec:set-workspace-versions")
-          [ "${{ inputs.skip_build }}" = "true" ] && steps+=("@semantic-release/exec:build")
-          [ "${{ inputs.skip_root }}" = "true" ] && steps+=("@semantic-release/npm:\\.")
-          [ "${{ inputs.skip_cli }}" = "true" ] && steps+=("@semantic-release/npm:packages/cli")
-          [ "${{ inputs.skip_cherry_pick_filter }}" = "true" ] && steps+=("@semantic-release/npm:packages/cherry-pick-filter")
-          [ "${{ inputs.skip_tessl }}" = "true" ] && steps+=("@semantic-release/npm:packages/tessl")
-          [ "${{ inputs.skip_git }}" = "true" ] && steps+=("@semantic-release/git")
-          [ "${{ inputs.skip_github }}" = "true" ] && steps+=("@semantic-release/github")
+          [ "$SKIP_INSTALL" = "true" ] && steps+=("@semantic-release/exec:install")
+          [ "$SKIP_SET_WORKSPACE_VERSIONS" = "true" ] && steps+=("@semantic-release/exec:set-workspace-versions")
+          [ "$SKIP_BUILD" = "true" ] && steps+=("@semantic-release/exec:build")
+          [ "$SKIP_ROOT" = "true" ] && steps+=("@semantic-release/npm:\\.")
+          [ "$SKIP_CLI" = "true" ] && steps+=("@semantic-release/npm:packages/cli")
+          [ "$SKIP_CHERRY_PICK_FILTER" = "true" ] && steps+=("@semantic-release/npm:packages/cherry-pick-filter")
+          [ "$SKIP_TESSL" = "true" ] && steps+=("@semantic-release/npm:packages/tessl")
+          [ "$SKIP_GIT" = "true" ] && steps+=("@semantic-release/git")
+          [ "$SKIP_GITHUB" = "true" ] && steps+=("@semantic-release/github")
           echo "skip_steps=$(IFS='|'; echo "${steps[*]}")" >> $GITHUB_OUTPUT
 
   release:
