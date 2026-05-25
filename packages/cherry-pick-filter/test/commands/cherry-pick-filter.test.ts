@@ -143,12 +143,12 @@ describe("cherry-pick-filter", () => {
     execSync('git commit -m "beta: add conflict"', { cwd: dir, stdio: "pipe" });
 
     git("checkout", "conflict-src");
-    const { error, stderr } = await runCommand(
+    const { error } = await runCommand(
       ["cherry-pick-filter", "beta", "--filter", ".planning/"],
       { root },
     );
     assert.ok(error);
-    assert.match(stderr, /cherry-pick failed/i);
+    assert.match(error!.message, /cherry-pick failed/i);
   });
 
   it("errors when already on target branch", async () => {
