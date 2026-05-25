@@ -28,9 +28,18 @@ export function buildSkipFilter() {
   };
 }
 
-// Helper: create a plugin entry and register its step ID in the Map
-function withId(name, suffix, options = {}) {
-  const entry = [name, options];
+// Helper: create a plugin entry and register its step ID in the Map.
+// Supports two call signatures:
+//   withId(name, suffix, options?) — registers as name:suffix
+//   withId(name, options?)        — registers as name (no suffix)
+function withId(name, suffixOrOptions, options = {}) {
+  const suffix =
+    typeof suffixOrOptions === "string" ? suffixOrOptions : undefined;
+  const opts =
+    typeof suffixOrOptions === "object" && suffixOrOptions !== null
+      ? suffixOrOptions
+      : options;
+  const entry = [name, opts];
   stepIds.set(entry, stepId(name, suffix));
   return entry;
 }
@@ -66,7 +75,7 @@ export const allPlugins = [
     pkgRoot: "packages/tessl",
     tarballDir: "dist/releases",
   }),
-  withId("@semantic-release/git", undefined, {
+  withId("@semantic-release/git", {
     assets: [
       "CHANGELOG.md",
       "package.json",
@@ -76,7 +85,7 @@ export const allPlugins = [
     message:
       "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}\n\n[skip ci]",
   }),
-  withId("@semantic-release/github", undefined),
+  withId("@semantic-release/github"),
 ];
 
 export default {
