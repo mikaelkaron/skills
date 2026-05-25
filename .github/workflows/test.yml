@@ -9,6 +9,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
@@ -18,12 +21,18 @@ jobs:
       - run: npm ci
       - run: npm run build
       - name: Run tests with coverage
-        run: npm run test:coverage 2>&1 | tee /tmp/coverage.txt
+        run: npm run test:coverage | tee /tmp/coverage.txt
+      - name: Post coverage to PR
+        uses: romeovs/lcov-reporter-action@v0.4.0
+        if: always() && github.event_name == 'pull_request'
+        with:
+          lcov-file: ./coverage/lcov.info
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Post coverage to summary
-        if: always()
+        if: always() && github.event_name == 'push'
         run: |
           echo '## Coverage' >> "$GITHUB_STEP_SUMMARY"
           echo '' >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
-          grep '^# ' /tmp/coverage.txt | sed 's/^# //' >> "$GITHUB_STEP_SUMMARY"
+          cat /tmp/coverage.txt >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
