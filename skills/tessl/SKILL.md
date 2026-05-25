@@ -20,80 +20,65 @@ If the plugin is not installed, output: `Error: Plugin 'tessl' is not installed.
 
 ## Usage
 
+All commands accept `--global` / `-g` to target `~/.tessl/` instead of the current project.
+
 ### Install
 
 ```bash
 mks tessl:install <plugin> [plugin...] [flags]
 ```
 
-| Argument | Required | Description                                                          |
-| -------- | -------- | -------------------------------------------------------------------- |
-| `plugin` | Yes      | Installed plugin name(s) (the oclif `id`, e.g. `cherry-pick-filter`) |
+`plugin`: installed plugin name(s) (the oclif `id`, e.g. `cherry-pick-filter`) — required.
 
-| Flag                | Short | Description                                                      |
-| ------------------- | ----- | ---------------------------------------------------------------- |
-| `--global`          | `-g`  | Install tiles globally to `~/.tessl/` instead of current project |
-| `--yes`             |       | Skip confirmation prompts and auto-select all skills             |
-| `--verbose`         | `-v`  | Show detailed warning messages during installation               |
-| `--accept-warnings` |       | Pre-accept install policy warnings (no interactive prompt)       |
-| `--agent <agent>`   |       | Override agents to install for (repeatable)                      |
+| Flag                | Short | Description                                          |
+| ------------------- | ----- | ---------------------------------------------------- |
+| `--global`          | `-g`  | Install globally to `~/.tessl/`                      |
+| `--yes`             |       | Skip confirmation prompts and auto-select all skills |
+| `--verbose`         | `-v`  | Show detailed warning messages                       |
+| `--accept-warnings` |       | Pre-accept install policy warnings                   |
+| `--agent <agent>`   |       | Override agents to install for (repeatable)          |
 
 ```bash
 mks tessl:install cherry-pick-filter
-mks tessl:install tessl
 mks tessl:install cherry-pick-filter tessl
 mks tessl:install cherry-pick-filter --global
 mks tessl:install cherry-pick-filter --yes --verbose
 mks tessl:install cherry-pick-filter --agent claude-code --agent cursor
 ```
 
-Verify: check that the tile appears in the project's `.tessl/` directory (or `~/.tessl/` when `--global` is used).
+Verify: tile appears in `.tessl/` (or `~/.tessl/` with `--global`).
 
 ### Uninstall
 
 ```bash
-mks tessl:uninstall <plugin> [plugin...] [flags]
+mks tessl:uninstall <plugin> [plugin...] [--global]
 ```
 
-| Argument | Required | Description                                                          |
-| -------- | -------- | -------------------------------------------------------------------- |
-| `plugin` | Yes      | Installed plugin name(s) (the oclif `id`, e.g. `cherry-pick-filter`) |
-
-| Flag       | Short | Description                                                        |
-| ---------- | ----- | ------------------------------------------------------------------ |
-| `--global` | `-g`  | Uninstall tiles from global `~/.tessl/` instead of current project |
+`plugin`: installed plugin name(s) — required.
 
 ```bash
 mks tessl:uninstall cherry-pick-filter
-mks tessl:uninstall tessl
 mks tessl:uninstall cherry-pick-filter tessl
 mks tessl:uninstall cherry-pick-filter --global
 ```
 
-Verify: check that the tile is no longer present in the project's `.tessl/` directory (or `~/.tessl/` when `--global` is used).
+Verify: tile absent from `.tessl/` (or `~/.tessl/` with `--global`).
 
 ### List
 
 ```bash
-mks tessl:list [plugin...] [flags]
+mks tessl:list [plugin...] [--global]
 ```
 
-| Argument | Required | Description                                                                  |
-| -------- | -------- | ---------------------------------------------------------------------------- |
-| `plugin` | No       | Installed plugin name(s) to validate before listing (omit to list all tiles) |
-
-| Flag       | Short | Description                                                   |
-| ---------- | ----- | ------------------------------------------------------------- |
-| `--global` | `-g`  | List tiles from global `~/.tessl/` instead of current project |
+`plugin`: installed plugin name(s) to validate before listing — optional (omit to list all).
 
 ```bash
 mks tessl:list
 mks tessl:list cherry-pick-filter
-mks tessl:list cherry-pick-filter tessl
 mks tessl:list --global
 ```
 
-Verify: output from `tessl list` is displayed without error.
+Verify: `tessl list` output displayed without error.
 
 **Errors:**
 
