@@ -101,14 +101,20 @@ describe("release.yml", () => {
 
   it("GHA-08: semantic-release step has GITHUB_TOKEN and NPM_TOKEN env vars", () => {
     const steps = (releaseYml.jobs as any).release.steps;
-    const semrelStep = steps[steps.length - 1];
-    assert.ok(
-      semrelStep.env?.GITHUB_TOKEN,
-      "semantic-release step should have GITHUB_TOKEN",
+    const semrelStep = steps.find(
+      (s: any) =>
+        typeof s.run === "string" && s.run.includes("semantic-release"),
     );
-    assert.ok(
+    assert.ok(semrelStep, "semantic-release step should exist");
+    assert.equal(
+      semrelStep.env?.GITHUB_TOKEN,
+      "${{ secrets.GITHUB_TOKEN }}",
+      "GITHUB_TOKEN should reference the GITHUB_TOKEN secret",
+    );
+    assert.equal(
       semrelStep.env?.NPM_TOKEN,
-      "semantic-release step should have NPM_TOKEN",
+      "${{ secrets.NPM_TOKEN }}",
+      "NPM_TOKEN should reference the NPM_TOKEN secret",
     );
   });
 
