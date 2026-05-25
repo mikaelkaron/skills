@@ -1,0 +1,151 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { describe, it } from "node:test";
+import { load } from "js-yaml";
+
+const releaseYml = load(
+  readFileSync(".github/workflows/release.yml", "utf8"),
+) as Record<string, unknown>;
+
+const ciYml = load(readFileSync(".github/workflows/ci.yml", "utf8")) as Record<
+  string,
+  unknown
+>;
+
+describe("release.yml", () => {
+  it("GHA-01: triggers on workflow_dispatch only", () => {
+    const on = releaseYml.on as Record<string, unknown>;
+    assert.ok("workflow_dispatch" in on, "workflow_dispatch trigger missing");
+    assert.equal(
+      Object.keys(on).length,
+      1,
+      "should have exactly one trigger (workflow_dispatch)",
+    );
+  });
+
+  it("GHA-02: has boolean skip inputs for each skippable step", () => {
+    const inputs = (releaseYml.on as any).workflow_dispatch.inputs;
+    const expected = [
+      "skip_install",
+      "skip_set_workspace_versions",
+      "skip_build",
+      "skip_root",
+      "skip_cli",
+      "skip_cherry_pick_filter",
+      "skip_tessl",
+      "skip_git",
+      "skip_github",
+    ];
+    for (const name of expected) {
+      assert.ok(name in inputs, `missing input: ${name}`);
+      assert.equal(inputs[name].type, "boolean", `${name} should be boolean`);
+    }
+  });
+
+  it("GHA-03: checkout step uses fetch-depth: 0", () => {
+    const steps = (releaseYml.jobs as any).release.steps;
+    assert.equal(
+      steps[0].with["fetch-depth"],
+      0,
+      "first step (checkout) should have fetch-depth: 0",
+    );
+  });
+
+  it("GHA-04: setup-node step does not set registry-url", () => {
+    const steps = (releaseYml.jobs as any).release.steps;
+    const setupNodeStep = steps[1];
+    assert.ok(
+      !("registry-url" in (setupNodeStep.with ?? {})),
+      "setup-node should not set registry-url",
+    );
+  });
+
+  it("GHA-05: release job has required permissions", () => {
+    const perms = (releaseYml.jobs as any).release.permissions;
+    assert.equal(perms.contents, "write");
+    assert.equal(perms.issues, "write");
+    assert.equal(perms["pull-requests"], "write");
+    assert.equal(perms["id-token"], "write");
+  });
+
+  it("GHA-06: release job has concurrency with cancel-in-progress: false", () => {
+    const concurrency = (releaseYml.jobs as any).release.concurrency;
+    assert.equal(
+      concurrency["cancel-in-progress"],
+      false,
+      "cancel-in-progress should be false",
+    );
+  });
+
+  it("GHA-07: setup job has assemble step with IFS='|' in run script", () => {
+    const setupSteps = (releaseYml.jobs as any).setup.steps;
+    assert.equal(
+      setupSteps[0].id,
+      "assemble",
+      "first setup step should have id: assemble",
+    );
+    assert.ok(
+      setupSteps[0].run.includes("IFS='|'"),
+      "assemble step run script should contain IFS='|'",
+    );
+  });
+
+  it("GHA-08: semantic-release step has GITHUB_TOKEN and NPM_TOKEN env vars", () => {
+    const steps = (releaseYml.jobs as any).release.steps;
+    const semrelStep = steps[steps.length - 1];
+    assert.ok(
+      semrelStep.env?.GITHUB_TOKEN,
+      "semantic-release step should have GITHUB_TOKEN",
+    );
+    assert.ok(
+      semrelStep.env?.NPM_TOKEN,
+      "semantic-release step should have NPM_TOKEN",
+    );
+  });
+
+  it("GHA-09: release job if condition includes refs/heads/main", () => {
+    const jobIf = (releaseYml.jobs as any).release.if;
+    assert.ok(
+      typeof jobIf === "string" && jobIf.includes("refs/heads/main"),
+      "release job if condition should include refs/heads/main",
+    );
+  });
+});
+
+describe("ci.yml", () => {
+  it("CI-01: triggers on push and pull_request to main, ci job exists", () => {
+    const on = ciYml.on as any;
+    assert.ok(
+      Array.isArray(on.push.branches) && on.push.branches.includes("main"),
+      "push trigger should include main branch",
+    );
+    assert.ok(
+      Array.isArray(on.pull_request.branches) &&
+        on.pull_request.branches.includes("main"),
+      "pull_request trigger should include main branch",
+    );
+    assert.ok((ciYml.jobs as any).ci, "ci job should exist");
+  });
+
+  it("CI-02: setup-node step has cache: npm", () => {
+    const steps = (ciYml.jobs as any).ci.steps;
+    const setupNodeStep = steps.find(
+      (s: any) =>
+        typeof s.uses === "string" && s.uses.startsWith("actions/setup-node"),
+    );
+    assert.ok(setupNodeStep, "setup-node step should exist");
+    assert.equal(
+      setupNodeStep.with?.cache,
+      "npm",
+      "setup-node should have cache: npm",
+    );
+  });
+
+  it("CI-03: ci job if condition includes [skip ci]", () => {
+    const jobIf = (ciYml.jobs as any).ci.if;
+    assert.ok(
+      typeof jobIf === "string" && jobIf.includes("[skip ci]"),
+      "ci job if condition should include [skip ci]",
+    );
+  });
+});
