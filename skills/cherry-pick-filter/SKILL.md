@@ -1,5 +1,5 @@
 ---
-name: cherry-pick-filter
+name: mks-cherry-pick-filter
 description: Sync a working branch to a clean merge branch by cherry-picking commits that don't touch filtered paths. Use this script only when syncing branches to beta/main during PR preparation or updates (e.g., "sync to beta", "cherry-pick to beta", "update PR branch").
 compatibility: "Requires Node.js 22+ and git. If Node.js version is below 22, output: `Error: Node.js 22+ is required. Please upgrade your Node.js version.`"
 ---

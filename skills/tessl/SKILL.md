@@ -1,5 +1,5 @@
 ---
-name: tessl
+name: mks-tessl
 description: Install or uninstall tessl skill tiles for installed mks plugins. Use this when asked to "install the tile for an mks plugin", "uninstall the tile for an mks plugin", "tessl install PLUGIN", or "tessl uninstall PLUGIN". This skill is only for the mks CLI — not for any other plugin system.
 compatibility: "Requires the mks CLI with the tessl plugin installed, and the tessl CLI available. If tessl is not found, output: `Error: tessl CLI not found. Install it from https://tessl.io`"
 ---

@@ -1,10 +1,10 @@
 {
   "name": "mikaelkaron/cli",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": false,
   "summary": "Manages the skills CLI and its plugins. Use when installing, listing, updating, or removing skills plugins.",
   "skills": {
-    "cli": {
+    "mks-cli": {
       "path": "SKILL.md"
     }
   }

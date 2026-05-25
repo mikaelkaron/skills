@@ -1,5 +1,5 @@
 ---
-name: cli
+name: mks-cli
 description: Manage the mks CLI and its plugins. Use this when installing, listing, updating, or removing skills plugins (e.g., "install cherry-pick-filter plugin", "list installed plugins", "update plugins").
 compatibility: "Requires Node.js 22+ and the @mikaelkaron/skills package installed. If not installed, output: `Error: mks CLI not found. Install it with: npm install -g @mikaelkaron/skills`"
 ---
