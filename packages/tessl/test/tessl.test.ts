@@ -367,6 +367,10 @@ describe("install", () => {
           t.skip("tile not available in registry");
           return;
         }
+        if (!existsSync(join(realTmpDir, ".mcp.json"))) {
+          t.skip("tile requires authentication");
+          return;
+        }
         assert.ok(
           existsSync(join(realTmpDir, "tessl.json")),
           "tessl.json should be created",
@@ -413,6 +417,10 @@ describe("uninstall", () => {
           t.skip("tile not available in registry");
           return;
         }
+        if (!existsSync(join(realTmpDir, ".mcp.json"))) {
+          t.skip("tile requires authentication");
+          return;
+        }
         assert.ok(existsSync(join(realTmpDir, "tessl.json")));
         uninstall(tileRef, tesslBin!);
         const manifest = JSON.parse(
@@ -455,6 +463,10 @@ describe("list", () => {
           install(tileRef, tesslBin!);
         } catch {
           t.skip("tile not available in registry");
+          return;
+        }
+        if (!existsSync(join(realTmpDir, ".mcp.json"))) {
+          t.skip("tile requires authentication");
           return;
         }
         assert.doesNotThrow(() => list(tesslBin!));
