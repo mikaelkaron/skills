@@ -9,10 +9,23 @@ import {
   rmSync,
   writeFileSync,
 } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import which from "which";
 import { install, uninstall } from "../../src/lib/tessl.ts";
+
+function findPkgRoot(dir: string): string {
+  return existsSync(join(dir, "package.json"))
+    ? dir
+    : findPkgRoot(dirname(dir));
+}
+
+const pkgRoot = findPkgRoot(dirname(fileURLToPath(import.meta.url)));
+const { tessl: tesslPjson } = JSON.parse(
+  readFileSync(join(pkgRoot, "package.json"), "utf8"),
+) as { tessl: { tile: string; version: string } };
+const tileRef = `${tesslPjson.tile}@${tesslPjson.version}`;
 
 const tesslBin = which.sync("tessl", { nothrow: true });
 
@@ -111,7 +124,7 @@ describe("install", () => {
       "initializes project and installs tile",
       { skip: !tesslBin && "tessl not found" },
       () => {
-        install("mikaelkaron/tessl@0.1.0", tesslBin!);
+        install(tileRef, tesslBin!);
         assert.ok(
           existsSync(join(realTmpDir, "tessl.json")),
           "tessl.json should be created",

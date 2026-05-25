@@ -24,12 +24,22 @@ function findPkgRoot(dir: string): string {
 const root = findPkgRoot(dirname(fileURLToPath(import.meta.url)));
 const tesslBin = which.sync("tessl", { nothrow: true });
 
+const { tessl: tesslPjson } = JSON.parse(
+  readFileSync(join(root, "package.json"), "utf8"),
+) as { tessl: { tile: string; version: string } };
+
+const tileRef = `${tesslPjson.tile}@${tesslPjson.version}`;
+
 const tmpDir = join(tmpdir(), `tessl-install-cmd-test-${process.pid}`);
 let fakeTessl: string;
+let stateDir: string;
 
 before(() => {
   mkdirSync(tmpDir, { recursive: true });
   fakeTessl = join(tmpDir, "tessl");
+  stateDir = join(tmpDir, "state");
+  mkdirSync(stateDir, { recursive: true });
+  process.env["TESSL_STATE_DIR"] = stateDir;
 });
 
 after(() => rmSync(tmpDir, { recursive: true, force: true }));
@@ -38,6 +48,7 @@ afterEach(() => {
   delete process.env["TESSL_CMD"];
   process.exitCode = undefined;
   if (existsSync(`${tmpDir}/last-args`)) rmSync(`${tmpDir}/last-args`);
+  if (existsSync(`${stateDir}/tiles.json`)) rmSync(`${stateDir}/tiles.json`);
 });
 
 function makeFakeTessl(exitCode = 0) {
@@ -53,12 +64,33 @@ function lastArgs(): string {
   return readFileSync(`${tmpDir}/last-args`, "utf8").trim();
 }
 
+function readState(): Record<string, string> {
+  const file = join(stateDir, "tiles.json");
+  if (!existsSync(file)) return {};
+  return JSON.parse(readFileSync(file, "utf8")) as Record<string, string>;
+}
+
 describe("tessl install", () => {
   it("errors when plugin is not installed", async () => {
     const { error } = await runCommand(["tessl:install", "unknown-plugin"], {
       root,
     });
     assert.match(error!.message, /is not installed/);
+  });
+
+  it("passes current tile ref to tessl", async () => {
+    makeFakeTessl();
+    await runCommand(["tessl:install", "tessl"], { root });
+    assert.match(
+      lastArgs(),
+      new RegExp(`install ${tileRef.replace(/\//g, "\\/").replace(/@/g, "@")}`),
+    );
+  });
+
+  it("stores the installed tile ref", async () => {
+    makeFakeTessl();
+    await runCommand(["tessl:install", "tessl"], { root });
+    assert.equal(readState()["tessl"], tileRef);
   });
 
   describe("flags", () => {
@@ -134,8 +166,14 @@ describe("tessl install", () => {
       assert.equal(error, undefined);
       const lines = lastArgs().split("\n");
       assert.equal(lines.length, 2);
-      assert.match(lines[0], /install mikaelkaron\/tessl@0\.1\.0/);
-      assert.match(lines[1], /install mikaelkaron\/tessl@0\.1\.0/);
+      assert.match(
+        lines[0],
+        new RegExp(`install ${tileRef.replace(/\//g, "\\/")}`),
+      );
+      assert.match(
+        lines[1],
+        new RegExp(`install ${tileRef.replace(/\//g, "\\/")}`),
+      );
     });
   });
 
