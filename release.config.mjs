@@ -5,6 +5,10 @@ export function stepId(name, suffix) {
   return suffix ? `${name}:${suffix}` : name;
 }
 
+// Map from plugin entry tuple to its step ID — keeps __stepId out of the
+// options object that semantic-release passes to plugin lifecycle functions
+const stepIds = new Map();
+
 // Build a filter function that removes plugins whose stepId matches SEMREL_SKIP_STEPS regex
 export function buildSkipFilter() {
   const skipPattern = env.SEMREL_SKIP_STEPS;
@@ -19,14 +23,16 @@ export function buildSkipFilter() {
   }
   return (entry) => {
     if (!Array.isArray(entry)) return true;
-    const id = entry[1]?.__stepId;
+    const id = stepIds.get(entry);
     return !id || !regex.test(id);
   };
 }
 
-// Helper: wrap a plugin entry with a __stepId option for the filter to read
+// Helper: create a plugin entry and register its step ID in the Map
 function withId(name, suffix, options = {}) {
-  return [name, { ...options, __stepId: stepId(name, suffix) }];
+  const entry = [name, options];
+  stepIds.set(entry, stepId(name, suffix));
+  return entry;
 }
 
 export const allPlugins = [
