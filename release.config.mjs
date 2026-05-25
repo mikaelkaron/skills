@@ -9,22 +9,16 @@ export function stepId(name, suffix) {
 // options object that semantic-release passes to plugin lifecycle functions
 const stepIds = new Map();
 
-// Escape regex metacharacters in a string so it can be used as a literal match
-function escapeRegex(s) {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-// Build a filter function that removes plugins whose stepId matches SEMREL_SKIP_STEPS
-// Each pipe-separated segment is treated as a literal step ID (not a raw regex pattern)
+// Build a filter function that removes plugins whose stepId is in SEMREL_SKIP_STEPS
+// Each pipe-separated segment is compared as an exact literal step ID
 export function buildSkipFilter() {
   const skipPattern = env.SEMREL_SKIP_STEPS;
   if (!skipPattern) return () => true; // keep all
-  const parts = skipPattern.split("|").map(escapeRegex);
-  const regex = new RegExp(`^(${parts.join("|")})$`);
+  const skipSet = new Set(skipPattern.split("|").filter(Boolean));
   return (entry) => {
     if (!Array.isArray(entry)) return true;
     const id = stepIds.get(entry);
-    return !id || !regex.test(id);
+    return !id || !skipSet.has(id);
   };
 }
 

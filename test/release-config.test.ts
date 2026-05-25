@@ -59,8 +59,14 @@ describe("buildSkipFilter", () => {
     assert.equal(filtered.length, allPlugins.length);
   });
 
-  it("excludes entries whose stepId matches the regex", () => {
-    process.env["SEMREL_SKIP_STEPS"] = "@semantic-release/npm";
+  it("excludes entries whose stepId is in the skip set", () => {
+    const npmStepIds = [
+      "@semantic-release/npm:.",
+      "@semantic-release/npm:packages/cli",
+      "@semantic-release/npm:packages/cherry-pick-filter",
+      "@semantic-release/npm:packages/tessl",
+    ];
+    process.env["SEMREL_SKIP_STEPS"] = npmStepIds.join("|");
     const filtered = allPlugins.filter(buildSkipFilter());
     const npmRemaining = filtered.filter(
       (entry) => Array.isArray(entry) && entry[0] === "@semantic-release/npm",
@@ -69,16 +75,14 @@ describe("buildSkipFilter", () => {
     delete process.env["SEMREL_SKIP_STEPS"];
   });
 
-  it("throws when SEMREL_SKIP_STEPS contains an invalid regex", () => {
-    process.env["SEMREL_SKIP_STEPS"] = "[invalid";
-    try {
-      assert.throws(
-        () => buildSkipFilter(),
-        /SEMREL_SKIP_STEPS contains an invalid regex/,
-      );
-    } finally {
-      delete process.env["SEMREL_SKIP_STEPS"];
-    }
+  it("keeps entries not in the skip set", () => {
+    process.env["SEMREL_SKIP_STEPS"] = "@semantic-release/npm:.";
+    const filtered = allPlugins.filter(buildSkipFilter());
+    const npmRemaining = filtered.filter(
+      (entry) => Array.isArray(entry) && entry[0] === "@semantic-release/npm",
+    );
+    assert.equal(npmRemaining.length, 3);
+    delete process.env["SEMREL_SKIP_STEPS"];
   });
 });
 

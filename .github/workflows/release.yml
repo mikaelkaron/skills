@@ -69,7 +69,7 @@ jobs:
           [ "$SKIP_INSTALL" = "true" ] && steps+=("@semantic-release/exec:install")
           [ "$SKIP_SET_WORKSPACE_VERSIONS" = "true" ] && steps+=("@semantic-release/exec:set-workspace-versions")
           [ "$SKIP_BUILD" = "true" ] && steps+=("@semantic-release/exec:build")
-          [ "$SKIP_ROOT" = "true" ] && steps+=("@semantic-release/npm:\\.")
+          [ "$SKIP_ROOT" = "true" ] && steps+=("@semantic-release/npm:.")
           [ "$SKIP_CLI" = "true" ] && steps+=("@semantic-release/npm:packages/cli")
           [ "$SKIP_CHERRY_PICK_FILTER" = "true" ] && steps+=("@semantic-release/npm:packages/cherry-pick-filter")
           [ "$SKIP_TESSL" = "true" ] && steps+=("@semantic-release/npm:packages/tessl")
