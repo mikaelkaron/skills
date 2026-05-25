@@ -43,6 +43,7 @@ on:
 jobs:
   setup:
     runs-on: ubuntu-latest
+    permissions: {} # no GitHub API access needed — only writes to GITHUB_OUTPUT
     outputs:
       skip_steps: ${{ steps.assemble.outputs.skip_steps }}
     steps:
