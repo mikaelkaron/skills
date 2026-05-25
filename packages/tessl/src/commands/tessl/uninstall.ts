@@ -1,5 +1,6 @@
 import { Args, Command, Flags } from "@oclif/core";
 import { uninstall } from "../../lib/tessl.js";
+import { readTiles, stateDir, writeTiles } from "../../lib/tiles.js";
 
 type PluginPjson = {
   tessl?: { tile?: string; version?: string };
@@ -58,12 +59,18 @@ export default class TesslUninstall extends Command {
         );
       }
 
-      const tileRef = tesslPjson.version
-        ? `${tesslPjson.tile}@${tesslPjson.version}`
-        : tesslPjson.tile;
+      const dir = stateDir(this.config.dataDir);
+      const installedRef =
+        readTiles(dir)[pluginName] ??
+        (tesslPjson.version
+          ? `${tesslPjson.tile}@${tesslPjson.version}`
+          : tesslPjson.tile);
 
       try {
-        uninstall(tileRef, undefined, extraArgs);
+        uninstall(installedRef, undefined, extraArgs);
+        const tiles = readTiles(dir);
+        delete tiles[pluginName];
+        writeTiles(dir, tiles);
       } catch (err: unknown) {
         this.error((err as Error).message, { exit: 1 });
       }

@@ -1,5 +1,6 @@
 import { Args, Command, Flags } from "@oclif/core";
 import { install } from "../../lib/tessl.js";
+import { readTiles, stateDir, writeTiles } from "../../lib/tiles.js";
 
 type PluginPjson = {
   tessl?: { tile?: string; version?: string };
@@ -82,6 +83,10 @@ export default class TesslInstall extends Command {
 
       try {
         install(tileRef, undefined, extraArgs);
+        const dir = stateDir(this.config.dataDir);
+        const tiles = readTiles(dir);
+        tiles[pluginName] = tileRef;
+        writeTiles(dir, tiles);
       } catch (err: unknown) {
         this.error((err as Error).message, { exit: 1 });
       }
