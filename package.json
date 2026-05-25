@@ -29,7 +29,8 @@
   "dependencies": {
     "@mikaelkaron/skills-cli": "^0.5.1",
     "@oclif/core": "^4",
-    "@oclif/plugin-plugins": "^5"
+    "@oclif/plugin-plugins": "^5",
+    "which": "^7.0.0"
   },
   "devDependencies": {
     "c8": "^11.0.0",
