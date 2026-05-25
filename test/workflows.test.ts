@@ -1,16 +1,20 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { describe, it } from "node:test";
+import { fileURLToPath } from "node:url";
 import { load } from "js-yaml";
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const repoRoot = join(__dirname, "..");
+
 const releaseYml = load(
-  readFileSync(".github/workflows/release.yml", "utf8"),
+  readFileSync(join(repoRoot, ".github/workflows/release.yml"), "utf8"),
 ) as Record<string, unknown>;
 
-const ciYml = load(readFileSync(".github/workflows/ci.yml", "utf8")) as Record<
-  string,
-  unknown
->;
+const ciYml = load(
+  readFileSync(join(repoRoot, ".github/workflows/ci.yml"), "utf8"),
+) as Record<string, unknown>;
 
 describe("release.yml", () => {
   it("GHA-01: triggers on workflow_dispatch only", () => {
