@@ -68,6 +68,18 @@ describe("buildSkipFilter", () => {
     assert.equal(npmRemaining.length, 0);
     delete process.env["SEMREL_SKIP_STEPS"];
   });
+
+  it("throws when SEMREL_SKIP_STEPS contains an invalid regex", () => {
+    process.env["SEMREL_SKIP_STEPS"] = "[invalid";
+    try {
+      assert.throws(
+        () => buildSkipFilter(),
+        /SEMREL_SKIP_STEPS contains an invalid regex/,
+      );
+    } finally {
+      delete process.env["SEMREL_SKIP_STEPS"];
+    }
+  });
 });
 
 describe("default export", () => {
