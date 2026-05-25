@@ -1,6 +1,6 @@
 ---
 name: mks-tessl
-description: Install or uninstall tessl skill tiles for installed mks plugins. Use this when asked to "install the tile for an mks plugin", "uninstall the tile for an mks plugin", "tessl install PLUGIN", or "tessl uninstall PLUGIN". This skill is only for the mks CLI — not for any other plugin system.
+description: Install, uninstall, or list tessl skill tiles for installed mks plugins. Use this when asked to "install the tile for an mks plugin", "uninstall the tile for an mks plugin", "list tiles for an mks plugin", "tessl install PLUGIN", "tessl uninstall PLUGIN", or "tessl list". This skill is only for the mks CLI — not for any other plugin system.
 compatibility: "Requires the mks CLI with the tessl plugin installed, and the tessl CLI available. If tessl is not found, output: `Error: tessl CLI not found. Install it from https://tessl.io`"
 ---
 
@@ -71,6 +71,29 @@ mks tessl:uninstall cherry-pick-filter --global
 ```
 
 Verify: check that the tile is no longer present in the project's `.tessl/` directory (or `~/.tessl/` when `--global` is used).
+
+### List
+
+```bash
+mks tessl:list [plugin...] [flags]
+```
+
+| Argument | Required | Description                                                                  |
+| -------- | -------- | ---------------------------------------------------------------------------- |
+| `plugin` | No       | Installed plugin name(s) to validate before listing (omit to list all tiles) |
+
+| Flag       | Short | Description                                                   |
+| ---------- | ----- | ------------------------------------------------------------- |
+| `--global` | `-g`  | List tiles from global `~/.tessl/` instead of current project |
+
+```bash
+mks tessl:list
+mks tessl:list cherry-pick-filter
+mks tessl:list cherry-pick-filter tessl
+mks tessl:list --global
+```
+
+Verify: output from `tessl list` is displayed without error.
 
 **Errors:**
 
