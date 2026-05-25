@@ -14,7 +14,7 @@ Two phases deliver zero-manual-step releases. Phase 1 builds and validates the r
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Release Config** - Install deps, port workspace scripts, author release.config.mjs, validate with dry-run (completed 2026-05-25)
-- [ ] **Phase 2: GitHub Actions** - Author release.yml and ci.yml, wire tokens and permissions
+- [x] **Phase 2: GitHub Actions** - Author release.yml and ci.yml, wire tokens and permissions (completed 2026-05-25)
 
 ## Phase Details
 
@@ -70,7 +70,7 @@ Plans:
 
 **Wave 2** _(blocked on Wave 1 completion)_
 
-- [ ] 02-02-PLAN.md — Author .github/workflows/ci.yml and delete test.yml: lint/build/test/coverage, [skip ci] guard, lcov PR comment (CI-01..CI-03)
+- [x] 02-02-PLAN.md — Author .github/workflows/ci.yml and delete test.yml: lint/build/test/coverage, [skip ci] guard, lcov PR comment (CI-01..CI-03)
 
 ## Progress
 
@@ -80,4 +80,4 @@ Phases execute in numeric order: 1 → 2
 | Phase             | Plans Complete | Status      | Completed  |
 | ----------------- | -------------- | ----------- | ---------- |
 | 1. Release Config | 4/4            | Complete    | 2026-05-25 |
-| 2. GitHub Actions | 2/3 | In Progress|  |
+| 2. GitHub Actions | 3/3 | Complete   | 2026-05-25 |
