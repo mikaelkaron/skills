@@ -21,6 +21,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run lint
+      - run: npm run build
+      - run: npm test
       - run: npm run test:coverage
       - name: Post coverage to PR
         uses: romeovs/lcov-reporter-action@v0.4.0
