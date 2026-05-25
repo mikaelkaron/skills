@@ -21,7 +21,7 @@ function run(args: string[], cmd = defaultCmd()): void {
   }
 
   if (result.status !== 0) {
-    process.exit(result.status ?? 1);
+    throw new Error(`tessl exited with code ${result.status}`);
   }
 }
 
