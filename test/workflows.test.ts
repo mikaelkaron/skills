@@ -44,16 +44,25 @@ describe("release.yml", () => {
 
   it("GHA-03: checkout step uses fetch-depth: 0", () => {
     const steps = (releaseYml.jobs as any).release.steps;
+    const checkoutStep = steps.find(
+      (s: any) =>
+        typeof s.uses === "string" && s.uses.startsWith("actions/checkout"),
+    );
+    assert.ok(checkoutStep, "checkout step should exist");
     assert.equal(
-      steps[0].with["fetch-depth"],
+      checkoutStep.with["fetch-depth"],
       0,
-      "first step (checkout) should have fetch-depth: 0",
+      "checkout step should have fetch-depth: 0",
     );
   });
 
   it("GHA-04: setup-node step does not set registry-url", () => {
     const steps = (releaseYml.jobs as any).release.steps;
-    const setupNodeStep = steps[1];
+    const setupNodeStep = steps.find(
+      (s: any) =>
+        typeof s.uses === "string" && s.uses.startsWith("actions/setup-node"),
+    );
+    assert.ok(setupNodeStep, "setup-node step should exist");
     assert.ok(
       !("registry-url" in (setupNodeStep.with ?? {})),
       "setup-node should not set registry-url",

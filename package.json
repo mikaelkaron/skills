@@ -20,6 +20,7 @@
     "prepublishOnly": "npm run build && oclif manifest .",
     "postpublish": "rm -f oclif.manifest.json",
     "pretest": "npm run build",
+    "pretest:coverage": "npm run build",
     "test": "node --experimental-strip-types --test 'packages/*/test/**/*.test.ts' 'test/**/*.test.ts'",
     "test:coverage": "c8 --reporter=text --reporter=lcov node --experimental-strip-types --test 'packages/*/test/**/*.test.ts' 'test/**/*.test.ts'",
     "test:types": "tsc -p tsconfig.test.json",
