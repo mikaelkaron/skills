@@ -26,7 +26,7 @@
     "pretest": "npm run build",
     "pretest:coverage": "npm run build",
     "test": "node --experimental-strip-types --test 'packages/*/test/**/*.test.ts' 'test/**/*.test.ts'",
-    "test:coverage": "c8 --reporter=text --reporter=lcov node --experimental-strip-types --test --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=test-results.xml 'packages/*/test/**/*.test.ts' 'test/**/*.test.ts'",
+    "test:coverage": "c8 --reporter=text --reporter=json-summary --reporter=lcov node --experimental-strip-types --test --test-reporter=spec --test-reporter-destination=stdout --test-reporter=./scripts/reporters/test.mts --test-reporter-destination=test-results.ndjson 'packages/*/test/**/*.test.ts' 'test/**/*.test.ts'",
     "test:types": "tsc -p tsconfig.test.json",
     "lint": "oxlint .",
     "format": "oxfmt ."

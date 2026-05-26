@@ -5,7 +5,7 @@
     "allowImportingTsExtensions": true,
     "noEmit": true
   },
-  "include": ["packages/*/test/**/*.ts", "test/**/*.ts"],
+  "include": ["packages/*/test/**/*.ts", "test/**/*.ts", "scripts/**/*.mts"],
   "references": [
     { "path": "packages/cherry-pick-filter" },
     { "path": "packages/tessl" }

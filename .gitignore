@@ -3,5 +3,5 @@ dist/
 *.tsbuildinfo
 oclif.manifest.json
 coverage/
-test-results.xml
+test-results.ndjson
 .planning/

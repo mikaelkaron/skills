@@ -16,7 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      checks: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -28,22 +27,19 @@ jobs:
       - run: npm run build
       - run: npm run test:types
       - run: npm run test:coverage
+      - name: Coverage summary
+        if: always()
+        run: node --experimental-strip-types scripts/coverage-summary.mts
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: coverage
           path: coverage/
+      - name: Test summary
+        if: always()
+        run: node --experimental-strip-types scripts/test-summary.mts test-results.ndjson
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: test-results
-          path: test-results.xml
-      - name: Fix test results XML
-        if: always()
-        run: node --experimental-strip-types scripts/fix-junit.mts
-      - uses: dorny/test-reporter@51956bab1c0d5107c4f16628b19ac384ab040405 # v1.3.0
-        if: always()
-        with:
-          name: Test Results
-          path: test-results.xml
-          reporter: java-junit
+          path: test-results.ndjson
