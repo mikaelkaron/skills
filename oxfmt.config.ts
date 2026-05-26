@@ -7,4 +7,5 @@ export default defineConfig({
   semi: true,
   singleQuote: false,
   trailingComma: "all",
+  ignorePatterns: ["CHANGELOG.md"],
 });
