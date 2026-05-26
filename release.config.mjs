@@ -57,10 +57,6 @@ export const allPlugins = [
     pkgRoot: ".",
     tarballDir: "dist/releases",
   }),
-  withId("@semantic-release/npm", "packages/cli", {
-    pkgRoot: "packages/cli",
-    tarballDir: "dist/releases",
-  }),
   withId("@semantic-release/npm", "packages/cherry-pick-filter", {
     pkgRoot: "packages/cherry-pick-filter",
     tarballDir: "dist/releases",

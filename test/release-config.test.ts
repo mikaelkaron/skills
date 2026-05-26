@@ -7,11 +7,11 @@ describe("allPlugins", () => {
     assert.ok(Array.isArray(allPlugins));
   });
 
-  it("contains exactly 4 @semantic-release/npm entries", () => {
+  it("contains exactly 3 @semantic-release/npm entries", () => {
     const npmEntries = allPlugins.filter(
       (entry) => Array.isArray(entry) && entry[0] === "@semantic-release/npm",
     );
-    assert.equal(npmEntries.length, 4);
+    assert.equal(npmEntries.length, 3);
   });
 
   it("each npm entry has a unique pkgRoot", () => {
@@ -20,17 +20,16 @@ describe("allPlugins", () => {
         Array.isArray(entry) && entry[0] === "@semantic-release/npm",
     );
     const pkgRoots = npmEntries.map((entry) => entry[1].pkgRoot);
-    assert.equal(new Set(pkgRoots).size, 4);
+    assert.equal(new Set(pkgRoots).size, 3);
   });
 
-  it("npm entries cover ., packages/cli, packages/cherry-pick-filter, packages/tessl", () => {
+  it("npm entries cover ., packages/cherry-pick-filter, packages/tessl", () => {
     const npmEntries = allPlugins.filter(
       (entry): entry is [string, Record<string, unknown>] =>
         Array.isArray(entry) && entry[0] === "@semantic-release/npm",
     );
     const pkgRoots = new Set(npmEntries.map((entry) => entry[1].pkgRoot));
     assert.ok(pkgRoots.has("."));
-    assert.ok(pkgRoots.has("packages/cli"));
     assert.ok(pkgRoots.has("packages/cherry-pick-filter"));
     assert.ok(pkgRoots.has("packages/tessl"));
   });
@@ -43,8 +42,8 @@ describe("stepId", () => {
 
   it("returns name:suffix when suffix provided", () => {
     assert.equal(
-      stepId("@semantic-release/npm", "packages/cli"),
-      "@semantic-release/npm:packages/cli",
+      stepId("@semantic-release/npm", "packages/tessl"),
+      "@semantic-release/npm:packages/tessl",
     );
   });
 });
@@ -64,7 +63,6 @@ describe("buildSkipFilter", () => {
   it("excludes entries whose stepId is in the skip set", () => {
     const npmStepIds = [
       "@semantic-release/npm:.",
-      "@semantic-release/npm:packages/cli",
       "@semantic-release/npm:packages/cherry-pick-filter",
       "@semantic-release/npm:packages/tessl",
     ];
@@ -83,7 +81,7 @@ describe("buildSkipFilter", () => {
     const npmRemaining = filtered.filter(
       (entry) => Array.isArray(entry) && entry[0] === "@semantic-release/npm",
     );
-    assert.equal(npmRemaining.length, 3);
+    assert.equal(npmRemaining.length, 2);
     delete process.env["SEMREL_SKIP_STEPS"];
   });
 });
