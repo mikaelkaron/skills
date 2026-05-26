@@ -285,10 +285,15 @@ ${nextRelease.notes}
 
 Trigger: push to `main`, any pull request, `workflow_dispatch`.
 
-| Job    | Node version | Steps                                                                                                                                                                       |
-| ------ | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `lint` | 24           | `npm ci` → `npm run lint`                                                                                                                                                   |
-| `test` | 24           | `npm ci` → `npm run build` → `npm run test:types` → `npm run test:coverage` → test summary → coverage summary → upload `test-results` artifact → upload `coverage` artifact |
+```mermaid
+graph LR
+  subgraph lint["lint (parallel)"]
+    L1["npm ci"] --> L2["npm run lint"]
+  end
+  subgraph test["test (parallel)"]
+    T1["npm ci"] --> T2["npm run build"] --> T3["test:types"] --> T4["test:coverage"] --> T5["test summary"] --> T6["coverage summary"] --> T7["upload artifacts"]
+  end
+```
 
 ### Release (`release.yml`)
 
