@@ -84,6 +84,12 @@ Example — sync to a `beta` branch, excluding `.planning/` files:
 mks cherry-pick-filter beta --filter .planning/
 ```
 
+Filter multiple path prefixes in a single run:
+
+```bash
+mks cherry-pick-filter beta --filter .planning/ --filter .agents/
+```
+
 Preview what would be cherry-picked without applying changes:
 
 ```bash
@@ -124,6 +130,12 @@ List installed tiles:
 
 ```bash
 mks tessl:list
+```
+
+Uninstall a tile:
+
+```bash
+mks tessl:uninstall cherry-pick-filter
 ```
 
 ---

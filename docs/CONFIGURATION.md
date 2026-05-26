@@ -65,12 +65,14 @@ Each package under `packages/` extends the root config and sets `"composite": tr
 
 Each package has a `test/tsconfig.json` for type-checking tests in isolation. Common settings:
 
-| Option                       | Value                |
-| ---------------------------- | -------------------- |
-| `composite`                  | `false`              |
-| `rootDir`                    | `.` (test directory) |
-| `allowImportingTsExtensions` | `true`               |
-| `noEmit`                     | `true`               |
+| Option                       | Value   |
+| ---------------------------- | ------- |
+| `composite`                  | `false` |
+| `rootDir`                    | `.`     |
+| `allowImportingTsExtensions` | `true`  |
+| `noEmit`                     | `true`  |
+
+Each test tsconfig also declares a `references` entry pointing to `".."` (the parent package).
 
 ---
 
@@ -142,7 +144,7 @@ c8 \
 | `json-summary` | `coverage/coverage-summary.json` |
 | `lcov`         | `coverage/lcov.info`             |
 
-No minimum coverage thresholds are configured. The CI job uploads the entire `coverage/` directory as an artifact named `coverage`.
+No minimum coverage thresholds are configured. The CI job uploads `test-results.ndjson` as an artifact named `test-results` and the entire `coverage/` directory as an artifact named `coverage`.
 
 ---
 
@@ -178,6 +180,7 @@ No minimum coverage thresholds are configured. The CI job uploads the entire `co
 | `id`                       | `tessl`                                             |
 | `commands.strategy`        | `pattern`                                           |
 | `commands.target`          | `./dist/commands`                                   |
+| `commands.globPatterns`    | `["**/*.js"]`                                       |
 | `topics.tessl.description` | `"Manage tessl skill tiles for installed plugins."` |
 
 ---
@@ -252,9 +255,9 @@ ${nextRelease.notes}
 
 ### Publish Tile workflow
 
-| Variable          | Where set                 | Description                                                                                                     |
-| ----------------- | ------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `TESSL_API_TOKEN` | `secrets.TESSL_API_TOKEN` | Authentication token for the tessl CLI <!-- VERIFY: token scope and expiry requirements for TESSL_API_TOKEN --> |
+| Variable          | Where set                 | Description                                                                                                                                                |
+| ----------------- | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TESSL_API_TOKEN` | `secrets.TESSL_API_TOKEN` | Authentication token passed to `tesslio/setup-tessl` for tessl CLI authentication <!-- VERIFY: token scope and expiry requirements for TESSL_API_TOKEN --> |
 
 ### Scripts (CI summaries)
 
@@ -290,9 +293,9 @@ Required secrets: `NPM_TOKEN`, `GITHUB_TOKEN`.
 
 ### Publish Tile (`publish-tile.yml`)
 
-Trigger: `workflow_dispatch` only. Select one or more packages via boolean inputs.
+Trigger: `workflow_dispatch` only. Select one or more packages via boolean inputs (`cherry-pick-filter`, `cli`, `tessl`).
 
-Each selected package's tile directory under `skills/<package>/` is published using the tessl CLI (`tessl tile publish .`).
+Each selected package's tile directory under `skills/<package>/` is published using the tessl CLI (`tessl tile publish .`). Authentication is handled by the `tesslio/setup-tessl@v2` action using OIDC (`id-token: write`).
 
 Required secret: `TESSL_API_TOKEN`.
 

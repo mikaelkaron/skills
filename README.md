@@ -145,6 +145,6 @@ npm run format
 | `npm run lint`          | Lint with oxlint                        |
 | `npm run format`        | Format with oxfmt                       |
 
-## License
+## Release History
 
 See [CHANGELOG.md](CHANGELOG.md) for release history.

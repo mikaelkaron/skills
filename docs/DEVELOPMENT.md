@@ -152,7 +152,7 @@ Releases are triggered manually via the `Release` workflow (`.github/workflows/r
 | `pre`   | `pre`    |
 | `alpha` | `alpha`  |
 | `beta`  | `beta`   |
-| `rc/*`  | `rc`     |
+| `rc`    | `rc`     |
 
 **Release steps (in order):**
 
@@ -160,7 +160,7 @@ Releases are triggered manually via the `Release` workflow (`.github/workflows/r
 2. Generate release notes and update `CHANGELOG.md`.
 3. Run `npm ci` and create `dist/releases/`.
 4. Update all workspace `package.json` version fields to the new version using `scripts/set-workspace-versions.mjs`.
-5. Regenerate the lockfile.
+5. Regenerate the lockfile (`npm install --package-lock-only`).
 6. Compile all packages (`npm run build`).
 7. Publish the root package (`@mikaelkaron/skills`) to npm.
 8. Publish `packages/cherry-pick-filter` (`@mikaelkaron/skills-cherry-pick-filter`) to npm.

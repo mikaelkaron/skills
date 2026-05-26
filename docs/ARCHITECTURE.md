@@ -121,7 +121,7 @@ graph TD
   B --> C["npm install --package-lock-only\n(update lockfile)"]
   C --> D["npm run build\n(tsc -b)"]
   D --> E["oclif manifest\n(per package prepublishOnly)"]
-  E --> F["@semantic-release/npm publish\n(root + 3 packages)"]
+  E --> F["@semantic-release/npm publish\n(root + 2 packages)"]
   F --> G["@semantic-release/git commit\n(CHANGELOG, package.json files)"]
   G --> H["@semantic-release/github\n(create release)"]
 ```
