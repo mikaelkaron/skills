@@ -44,13 +44,22 @@ After installing, confirm the plugin appears in the list:
 mks plugins
 ```
 
+If missing: verify the package name follows `@mikaelkaron/skills-<name>` convention (e.g. `mks plugins:install cherry-pick-filter` resolves to `@mikaelkaron/skills-cherry-pick-filter`).
+
 After uninstalling, confirm the plugin is no longer listed:
 
 ```bash
 mks plugins
 ```
 
-**Errors:**
+## Autocomplete
 
-- `Error: mks CLI not found.` — CLI is not installed; run `npm install -g @mikaelkaron/skills`
-- Plugin not found errors — verify the package name follows `@mikaelkaron/skills-<name>` convention
+```bash
+mks autocomplete             # display installation instructions for current shell
+mks autocomplete bash        # display bash setup instructions
+mks autocomplete zsh         # display zsh setup instructions
+mks autocomplete powershell  # display powershell setup instructions
+mks autocomplete -r          # refresh the autocomplete cache
+```
+
+Follow the printed instructions to add the autocomplete hook to your shell profile.
