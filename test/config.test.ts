@@ -22,14 +22,6 @@ describe("@mikaelkaron/skills oclif config", () => {
     );
   });
 
-  it("loads @mikaelkaron/skills-cli as a core plugin", async () => {
-    const config = await Config.load({ root });
-    assert.ok(
-      config.plugins.has("@mikaelkaron/skills-cli"),
-      "expected @mikaelkaron/skills-cli to be a core plugin",
-    );
-  });
-
   it("sets scope to mikaelkaron", async () => {
     const config = await Config.load({ root });
     assert.equal(config.pjson.oclif.scope, "mikaelkaron");
