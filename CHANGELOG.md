@@ -1,3 +1,42 @@
+# [2.0.0](https://github.com/mikaelkaron/skills/compare/v1.0.1...v2.0.0) (2026-05-26)
+
+
+* chore(260526-w09-01)!: delete packages/cli and regenerate package-lock.json ([d127ca1](https://github.com/mikaelkaron/skills/commit/d127ca196fdd761ffe7dbceb2517ac5309d5ad4f))
+
+
+### Bug Fixes
+
+* **02:** CR-01 escape regex metacharacters in buildSkipFilter step ID matching ([591708c](https://github.com/mikaelkaron/skills/commit/591708c43c843bdbce0fc325c3716f2abf5c7ddf))
+* **02:** CR-02 add permissions: {} to setup job in release.yml ([6f46d65](https://github.com/mikaelkaron/skills/commit/6f46d65e5db3511df2b0cb07bdc625ae6a885556))
+* **02:** IN-01 anchor workflow test file paths to import.meta.url ([a60a930](https://github.com/mikaelkaron/skills/commit/a60a930bc50aa28980aa31ccc9169a1c8eb0a795))
+* **02:** IN-02 add skip_changelog input to release.yml and test coverage ([5243d1b](https://github.com/mikaelkaron/skills/commit/5243d1b4a81d799193b0a1f15f438b2e84889c79))
+* **02:** IN-03 remove explicit undefined suffix from withId calls, support overloaded signature ([f8bcb23](https://github.com/mikaelkaron/skills/commit/f8bcb23c9f65bc0a722a8d61db24dc506299b8f9))
+* **02:** WR-01 route release.yml inputs through env vars to prevent shell injection ([cb35f8b](https://github.com/mikaelkaron/skills/commit/cb35f8b75491a0b0db599111d62285f218894498))
+* **02:** WR-02 remove redundant npm test step, keep only test:coverage in CI ([47a2adf](https://github.com/mikaelkaron/skills/commit/47a2adf2693f038195e077353869c6ae1a80becd))
+* **02:** WR-03 fix [skip ci] guard to also check PR title on pull_request events ([bf52a3b](https://github.com/mikaelkaron/skills/commit/bf52a3b2fd30c3b6fec24d723a4edb103eb30dc7))
+* **02:** WR-04 pin lcov-reporter-action to commit SHA instead of mutable tag ([fb339aa](https://github.com/mikaelkaron/skills/commit/fb339aa5ea504b534edaf3e992c784be8a4ad868))
+* **02:** WR-05 find semantic-release step by run content instead of last index ([8d83a95](https://github.com/mikaelkaron/skills/commit/8d83a95064e3dc30ca3693f341cffffa1523cbee))
+* **02:** WR-06 regenerate package-lock.json after version bump in release pipeline ([5a73688](https://github.com/mikaelkaron/skills/commit/5a73688e52cb98b129db5ccf0b76d060a7fda833))
+* **260526-w09-01:** remove packages/cli from release config and update tests ([9fbc73b](https://github.com/mikaelkaron/skills/commit/9fbc73bee2c8fa1b95582b05905a41e6e83be6a5))
+* **ci:** add time attribute to <testsuites> root element ([cffc0a2](https://github.com/mikaelkaron/skills/commit/cffc0a28d8e18a65eab3b433b0a65c0f7a16281c))
+* **ci:** correct YAML indentation in job if expression ([431124d](https://github.com/mikaelkaron/skills/commit/431124d53b6ba2b3c8a0c206878ca3f31124a8b4))
+* **ci:** remove job-level if condition that was blocking push triggers ([d055998](https://github.com/mikaelkaron/skills/commit/d05599816e850dbcb8eb150eacadfc99aa573427))
+* **ci:** remove redundant skip-ci checks, GitHub handles these natively ([c320f4e](https://github.com/mikaelkaron/skills/commit/c320f4ef06ce76e54e2405dd2006e3b42488e89f))
+* **ci:** repair JUnit XML before dorny processes it ([c76d158](https://github.com/mikaelkaron/skills/commit/c76d158a58c72d0dddd358ca6ee25243fa94f6b6))
+* **ci:** replace Python heredoc with TS fix-junit script ([2a6be0d](https://github.com/mikaelkaron/skills/commit/2a6be0d74bbd03e938c8a2078113ff60d205df8d))
+* **ci:** restore checks:write permission ([8a017f2](https://github.com/mikaelkaron/skills/commit/8a017f28398ba43af2cdf9670113b8013c8a753c))
+* **ci:** restore job if condition for draft PR and skip ci gating ([ae19e1b](https://github.com/mikaelkaron/skills/commit/ae19e1bdb94f1917172419b7c3e8b78097ffa115))
+* **ci:** simplify job if condition, remove head_commit reference ([930c470](https://github.com/mikaelkaron/skills/commit/930c47087ce2992f150f9e6d55dc73350e8f0749))
+* clean up .gitignore by removing duplicate entries and organizing ignored files ([34396af](https://github.com/mikaelkaron/skills/commit/34396afc87d928cb1a318ed7393029327f503a3c))
+* **release:** replace regex skip filter with exact Set membership ([66526b7](https://github.com/mikaelkaron/skills/commit/66526b7ca7b9cb097e9708dc3d30e19414f6b86d))
+* **types:** add .d.mts declarations for .mjs modules, fix test type errors ([1c3c865](https://github.com/mikaelkaron/skills/commit/1c3c865369165a593583d75b3b5a1278c70f344b))
+* **types:** allow JS imports and add @types/js-yaml for test type check ([94b9212](https://github.com/mikaelkaron/skills/commit/94b92125ef821cf0853d8b11703ac375a2d54e10))
+
+
+### BREAKING CHANGES
+
+* @mikaelkaron/skills-cli is no longer published as a separate npm package. The oclif configuration has been merged into the root @mikaelkaron/skills package.
+
 ## [1.0.1](https://github.com/mikaelkaron/skills/compare/v1.0.0...v1.0.1) (2026-05-25)
 
 ### Bug Fixes
