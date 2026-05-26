@@ -19,10 +19,6 @@ on:
         description: "Skip step: @semantic-release/npm:\\."
         type: boolean
         default: false
-      skip_cli:
-        description: "Skip step: @semantic-release/npm:packages/cli"
-        type: boolean
-        default: false
       skip_cherry_pick_filter:
         description: "Skip step: @semantic-release/npm:packages/cherry-pick-filter"
         type: boolean
@@ -58,7 +54,6 @@ jobs:
           SKIP_SET_WORKSPACE_VERSIONS: ${{ inputs.skip_set_workspace_versions }}
           SKIP_BUILD: ${{ inputs.skip_build }}
           SKIP_ROOT: ${{ inputs.skip_root }}
-          SKIP_CLI: ${{ inputs.skip_cli }}
           SKIP_CHERRY_PICK_FILTER: ${{ inputs.skip_cherry_pick_filter }}
           SKIP_TESSL: ${{ inputs.skip_tessl }}
           SKIP_GIT: ${{ inputs.skip_git }}
@@ -70,7 +65,6 @@ jobs:
           [ "$SKIP_SET_WORKSPACE_VERSIONS" = "true" ] && steps+=("@semantic-release/exec:set-workspace-versions")
           [ "$SKIP_BUILD" = "true" ] && steps+=("@semantic-release/exec:build")
           [ "$SKIP_ROOT" = "true" ] && steps+=("@semantic-release/npm:.")
-          [ "$SKIP_CLI" = "true" ] && steps+=("@semantic-release/npm:packages/cli")
           [ "$SKIP_CHERRY_PICK_FILTER" = "true" ] && steps+=("@semantic-release/npm:packages/cherry-pick-filter")
           [ "$SKIP_TESSL" = "true" ] && steps+=("@semantic-release/npm:packages/tessl")
           [ "$SKIP_GIT" = "true" ] && steps+=("@semantic-release/git")
