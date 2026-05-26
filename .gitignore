@@ -1,7 +1,9 @@
 node_modules/
 dist/
+coverage/
+.c8/
+.claude/
+.planning/
 *.tsbuildinfo
 oclif.manifest.json
-coverage/
 test-results.ndjson
-.planning/
