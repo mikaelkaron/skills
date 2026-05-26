@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pull-requests: write
+      checks: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -38,3 +38,9 @@ jobs:
         with:
           name: test-results
           path: test-results.xml
+      - uses: dorny/test-reporter@51956bab1c0d5107c4f16628b19ac384ab040405 # v1.3.0
+        if: always()
+        with:
+          name: Test Results
+          path: test-results.xml
+          reporter: java-junit
