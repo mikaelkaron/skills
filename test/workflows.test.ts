@@ -35,7 +35,6 @@ describe("release.yml", () => {
       "skip_set_workspace_versions",
       "skip_build",
       "skip_root",
-      "skip_cli",
       "skip_cherry_pick_filter",
       "skip_tessl",
       "skip_git",
