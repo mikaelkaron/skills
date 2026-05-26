@@ -9,7 +9,7 @@ Part of the [mikaelkaron/skills](https://github.com/mikaelkaron/skills) monorepo
 ## Prerequisites
 
 - Node.js >= 22.18
-- The `mks` CLI installed globally (`@mikaelkaron/skills-cli`)
+- The `mks` CLI installed globally (`@mikaelkaron/skills`)
 - The `tessl` CLI available on `PATH` or resolvable via `which` <!-- VERIFY: tessl CLI install location / download URL -->
 
 The `tessl` binary is resolved automatically. To override the path, set the `TESSL_CMD` environment variable:

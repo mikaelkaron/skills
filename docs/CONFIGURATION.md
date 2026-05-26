@@ -26,8 +26,7 @@ Project references (composite build):
 ```json
 "references": [
   { "path": "packages/cherry-pick-filter" },
-  { "path": "packages/tessl" },
-  { "path": "packages/cli" }
+  { "path": "packages/tessl" }
 ]
 ```
 
@@ -51,17 +50,16 @@ Additional options:
 
 Includes: `packages/*/test/**/*.ts`, `test/**/*.ts`, `scripts/**/*.mts`
 
-References: `packages/cherry-pick-filter`, `packages/tessl` (not `packages/cli` — the CLI package has no compiled source).
+References: `packages/cherry-pick-filter`, `packages/tessl`.
 
 ### Per-package `tsconfig.json`
 
 Each package under `packages/` extends the root config and sets `"composite": true` for project reference support.
 
-| Package              | `rootDir` | `outDir` | `noEmit`                      |
-| -------------------- | --------- | -------- | ----------------------------- |
-| `cherry-pick-filter` | `src`     | `dist`   | —                             |
-| `tessl`              | `src`     | `dist`   | —                             |
-| `cli`                | —         | —        | `true` (no source to compile) |
+| Package              | `rootDir` | `outDir` | `noEmit` |
+| -------------------- | --------- | -------- | -------- |
+| `cherry-pick-filter` | `src`     | `dist`   | —        |
+| `tessl`              | `src`     | `dist`   | —        |
 
 ### Per-package `test/tsconfig.json`
 
@@ -154,24 +152,13 @@ No minimum coverage thresholds are configured. The CI job uploads the entire `co
 
 `oclif` block in `package.json`:
 
-| Key            | Value                                                  | Description                                  |
-| -------------- | ------------------------------------------------------ | -------------------------------------------- |
-| `bin`          | `mks`                                                  | CLI binary name                              |
-| `dirname`      | `mikaelkaron/skills`                                   | oclif data directory under the OS config dir |
-| `pluginPrefix` | `skills`                                               | Prefix for discoverable plugins              |
-| `scope`        | `mikaelkaron`                                          | npm scope for plugin resolution              |
-| `plugins`      | `["@oclif/plugin-plugins", "@mikaelkaron/skills-cli"]` | Bundled plugins loaded at startup            |
-
-### `packages/cli`
-
-| Key            | Value                       |
-| -------------- | --------------------------- |
-| `bin`          | `mks`                       |
-| `dirname`      | `mikaelkaron/skills`        |
-| `id`           | `cli`                       |
-| `pluginPrefix` | `skills`                    |
-| `scope`        | `mikaelkaron`               |
-| `plugins`      | `["@oclif/plugin-plugins"]` |
+| Key            | Value                       | Description                                  |
+| -------------- | --------------------------- | -------------------------------------------- |
+| `bin`          | `mks`                       | CLI binary name                              |
+| `dirname`      | `mikaelkaron/skills`        | oclif data directory under the OS config dir |
+| `pluginPrefix` | `skills`                    | Prefix for discoverable plugins              |
+| `scope`        | `mikaelkaron`               | npm scope for plugin resolution              |
+| `plugins`      | `["@oclif/plugin-plugins"]` | Bundled plugins loaded at startup            |
 
 ### `packages/cherry-pick-filter`
 
@@ -202,7 +189,6 @@ Each package that ships a skill tile carries a `tessl` block in its `package.jso
 | Package              | Tile name                        | Tile version |
 | -------------------- | -------------------------------- | ------------ |
 | `cherry-pick-filter` | `mikaelkaron/cherry-pick-filter` | `0.3.0`      |
-| `cli`                | `mikaelkaron/cli`                | `0.3.0`      |
 | `tessl`              | `mikaelkaron/tessl`              | `0.4.0`      |
 
 The tile version in `package.json` (`tessl.version`) and `skills/<package>/tile.json` (`version`) must be kept in sync manually when the tile definition changes.
@@ -237,7 +223,6 @@ Plugins run in this order during a release. Each step has an ID used by `SEMREL_
 | `@semantic-release/exec:update-lockfile`            | `@semantic-release/exec`                    | `npm install --package-lock-only`                                                     |
 | `@semantic-release/exec:build`                      | `@semantic-release/exec`                    | `npm run build`                                                                       |
 | `@semantic-release/npm:.`                           | `@semantic-release/npm`                     | Publish root package, tarball → `dist/releases`                                       |
-| `@semantic-release/npm:packages/cli`                | `@semantic-release/npm`                     | Publish `packages/cli`, tarball → `dist/releases`                                     |
 | `@semantic-release/npm:packages/cherry-pick-filter` | `@semantic-release/npm`                     | Publish `packages/cherry-pick-filter`, tarball → `dist/releases`                      |
 | `@semantic-release/npm:packages/tessl`              | `@semantic-release/npm`                     | Publish `packages/tessl`, tarball → `dist/releases`                                   |
 | `@semantic-release/git`                             | `@semantic-release/git`                     | Commit `CHANGELOG.md`, `package.json`, `package-lock.json`, `packages/*/package.json` |

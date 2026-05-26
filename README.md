@@ -45,19 +45,6 @@ mks cherry-pick-filter beta --filter .planning/
 
 This is a monorepo. Each package under `packages/` is an oclif plugin published independently.
 
-### `@mikaelkaron/skills-cli`
-
-The core `mks` CLI. An oclif-based command runner with built-in plugin management scoped to `@mikaelkaron/skills-*`.
-
-```bash
-mks plugins                               # list installed plugins
-mks plugins:install cherry-pick-filter    # install a plugin by short name
-mks plugins:update                        # update all installed plugins
-mks plugins:uninstall cherry-pick-filter  # remove a plugin
-```
-
-See [skills/cli/SKILL.md](skills/cli/SKILL.md) for full documentation.
-
 ### `@mikaelkaron/skills-cherry-pick-filter`
 
 Syncs a working branch to a clean target branch by incrementally cherry-picking commits that do not touch filtered path prefixes. Mixed commits (touching both code and filtered files) are detected and reported before any cherry-pick is attempted.

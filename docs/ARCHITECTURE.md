@@ -15,7 +15,6 @@ skills/
 ├── bin/                        # Root CLI entry point (mks)
 ├── packages/
 │   ├── cherry-pick-filter/     # cherry-pick-filter plugin package
-│   ├── cli/                    # Standalone mks CLI plugin package
 │   └── tessl/                  # tessl tile management plugin package
 ├── scripts/                    # Release and CI utility scripts
 │   ├── lib/                    # Shared workspace/version helpers
@@ -39,13 +38,9 @@ The `packages/*` glob is declared as the npm workspaces entry. All packages shar
 
 ### Root (`@mikaelkaron/skills`)
 
-The root package is the primary published distribution. Its `bin/run.js` entry point delegates to `@oclif/core`'s `execute()` loader, which discovers plugins declared in the `oclif` section of `package.json`. The root oclif config lists `@oclif/plugin-plugins` (user-installable plugins) and `@mikaelkaron/skills-cli` as core plugins.
+The root package is the primary published distribution. Its `bin/run.js` entry point delegates to `@oclif/core`'s `execute()` loader, which discovers plugins declared in the `oclif` section of `package.json`. The root oclif config lists `@oclif/plugin-plugins` as a core plugin.
 
 The root package does **not** contain its own commands. All commands are contributed by plugins.
-
-### `packages/cli` (`@mikaelkaron/skills-cli`)
-
-A thin oclif plugin that carries no commands of its own. Its sole responsibility is to declare the oclif configuration surface — `bin`, `dirname`, `scope` (`mikaelkaron`), `pluginPrefix` (`skills`), and the bundled `@oclif/plugin-plugins` dependency — so that the same configuration applies whether the CLI is invoked via the root package or via this standalone plugin installed into another oclif host.
 
 ### `packages/cherry-pick-filter` (`@mikaelkaron/skills-cherry-pick-filter`)
 
@@ -93,34 +88,30 @@ src/
 ```mermaid
 graph TD
   root["@mikaelkaron/skills\n(bin: mks)"]
-  cli["@mikaelkaron/skills-cli\n(core plugin)"]
   pp["@oclif/plugin-plugins"]
   core["@oclif/core"]
   which["which"]
   cpf["@mikaelkaron/skills-cherry-pick-filter\n(standalone plugin)"]
   tessl_pkg["@mikaelkaron/skills-tessl\n(standalone plugin)"]
 
-  root --> cli
+  root --> pp
   root --> core
   root --> which
-  cli --> pp
   cpf --> core
   cpf --> which
   tessl_pkg --> core
   tessl_pkg --> which
 ```
 
-Workspace packages are cross-referenced via npm's `workspaces` mechanism. During release the root `package.json` declares `@mikaelkaron/skills-cli` as a runtime dependency at the same version as the workspace packages.
+Workspace packages are cross-referenced via npm's `workspaces` mechanism.
 
 ---
 
 ## Build Pipeline
 
-TypeScript is compiled using [project references](https://www.typescriptlang.org/docs/handbook/project-references.html). The root `tsconfig.json` declares references to `packages/cherry-pick-filter`, `packages/tessl`, and `packages/cli`. Running `tsc -b` from the root compiles all three packages in dependency order, emitting output to each package's `dist/` directory.
+TypeScript is compiled using [project references](https://www.typescriptlang.org/docs/handbook/project-references.html). The root `tsconfig.json` declares references to `packages/cherry-pick-filter` and `packages/tessl`. Running `tsc -b` from the root compiles both packages in dependency order, emitting output to each package's `dist/` directory.
 
 Each package `tsconfig.json` extends `../../tsconfig.json` and sets `composite: true`, `rootDir: src`, and `outDir: dist`, which is the standard oclif TypeScript layout.
-
-The `packages/cli` package has no `src/` directory and no build step — it is pure configuration and its `bin/run.js` is committed directly.
 
 Build sequence during release (driven by `release.config.mjs`):
 

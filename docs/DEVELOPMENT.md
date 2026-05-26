@@ -57,13 +57,12 @@ The root `tsconfig.json` declares project references for each package:
   "files": [],
   "references": [
     { "path": "packages/cherry-pick-filter" },
-    { "path": "packages/tessl" },
-    { "path": "packages/cli" }
+    { "path": "packages/tessl" }
   ]
 }
 ```
 
-Each package `tsconfig.json` extends the root config and sets `"composite": true` so `tsc -b` can track incremental builds. Packages that compile TypeScript to JavaScript (`cherry-pick-filter`, `tessl`) set `rootDir: "src"` and `outDir: "dist"`. The `cli` package has no compile step (it is JS only) and uses `"noEmit": true`.
+Each package `tsconfig.json` extends the root config and sets `"composite": true` so `tsc -b` can track incremental builds. Packages that compile TypeScript to JavaScript (`cherry-pick-filter`, `tessl`) set `rootDir: "src"` and `outDir: "dist"`.
 
 ## Code Style
 
@@ -164,11 +163,10 @@ Releases are triggered manually via the `Release` workflow (`.github/workflows/r
 5. Regenerate the lockfile.
 6. Compile all packages (`npm run build`).
 7. Publish the root package (`@mikaelkaron/skills`) to npm.
-8. Publish `packages/cli` (`@mikaelkaron/skills-cli`) to npm.
-9. Publish `packages/cherry-pick-filter` (`@mikaelkaron/skills-cherry-pick-filter`) to npm.
-10. Publish `packages/tessl` (`@mikaelkaron/skills-tessl`) to npm.
-11. Commit `CHANGELOG.md`, all `package.json` files, and `package-lock.json` back to the branch with `[skip ci]`.
-12. Create a GitHub release with the generated notes.
+8. Publish `packages/cherry-pick-filter` (`@mikaelkaron/skills-cherry-pick-filter`) to npm.
+9. Publish `packages/tessl` (`@mikaelkaron/skills-tessl`) to npm.
+10. Commit `CHANGELOG.md`, all `package.json` files, and `package-lock.json` back to the branch with `[skip ci]`.
+11. Create a GitHub release with the generated notes.
 
 **Skipping individual steps:** The Release workflow exposes a boolean input for each step. Check the box next to a step in the GitHub Actions UI to skip it during a re-run.
 

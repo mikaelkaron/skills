@@ -48,7 +48,7 @@ List currently installed plugins:
 mks plugins
 ```
 
-At a fresh install, only the core plugins (`@oclif/plugin-plugins` and `@mikaelkaron/skills-cli`) are loaded. Feature commands are provided by installable plugins.
+At a fresh install, only the core plugin (`@oclif/plugin-plugins`) is loaded. Feature commands are provided by installable plugins.
 
 ---
 
