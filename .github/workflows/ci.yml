@@ -38,6 +38,10 @@ jobs:
         with:
           name: test-results
           path: test-results.xml
+      - name: Fix test results XML
+        if: always()
+        run: |
+          sed -i -e 's|<undefined |<testsuite |g' -e 's|</undefined>|</testsuite>|g' test-results.xml
       - uses: dorny/test-reporter@51956bab1c0d5107c4f16628b19ac384ab040405 # v1.3.0
         if: always()
         with:

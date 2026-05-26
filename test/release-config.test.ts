@@ -16,17 +16,19 @@ describe("allPlugins", () => {
 
   it("each npm entry has a unique pkgRoot", () => {
     const npmEntries = allPlugins.filter(
-      (entry) => Array.isArray(entry) && entry[0] === "@semantic-release/npm",
+      (entry): entry is [string, Record<string, unknown>] =>
+        Array.isArray(entry) && entry[0] === "@semantic-release/npm",
     );
-    const pkgRoots = npmEntries.map((entry) => entry[1]?.pkgRoot);
+    const pkgRoots = npmEntries.map((entry) => entry[1].pkgRoot);
     assert.equal(new Set(pkgRoots).size, 4);
   });
 
   it("npm entries cover ., packages/cli, packages/cherry-pick-filter, packages/tessl", () => {
     const npmEntries = allPlugins.filter(
-      (entry) => Array.isArray(entry) && entry[0] === "@semantic-release/npm",
+      (entry): entry is [string, Record<string, unknown>] =>
+        Array.isArray(entry) && entry[0] === "@semantic-release/npm",
     );
-    const pkgRoots = new Set(npmEntries.map((entry) => entry[1]?.pkgRoot));
+    const pkgRoots = new Set(npmEntries.map((entry) => entry[1].pkgRoot));
     assert.ok(pkgRoots.has("."));
     assert.ok(pkgRoots.has("packages/cli"));
     assert.ok(pkgRoots.has("packages/cherry-pick-filter"));
