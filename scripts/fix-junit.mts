@@ -79,11 +79,16 @@ for (const { tag, text } of extractTopLevel(undefMatch[1])) {
   }
 }
 
+const totalTime = suites.reduce((sum, s) => {
+  const m = s.match(/time="([^"]*)"/);
+  return sum + (m ? parseFloat(m[1]) : 0);
+}, 0);
+
 writeFileSync(
   "test-results.xml",
   [
     '<?xml version="1.0" encoding="utf-8"?>',
-    "<testsuites>",
+    `<testsuites time="${totalTime.toFixed(3)}">`,
     ...suites.map((s) => `  ${s}`),
     "</testsuites>",
   ].join("\n") + "\n",
