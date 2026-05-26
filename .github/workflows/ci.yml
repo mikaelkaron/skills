@@ -4,15 +4,13 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+  workflow_dispatch:
 
 jobs:
-  ci:
-    if: github.event_name == 'push' || !github.event.pull_request.draft
+  lint:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      checks: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -21,17 +19,21 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run lint
+
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
       - run: npm run build
       - run: npm run test:types
       - run: npm run test:coverage
-      - name: Coverage summary
-        if: always()
-        run: node --experimental-strip-types scripts/coverage-summary.mts
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: coverage
-          path: coverage/
       - name: Test summary
         if: always()
         run: node --experimental-strip-types scripts/test-summary.mts test-results.ndjson
@@ -40,3 +42,29 @@ jobs:
         with:
           name: test-results
           path: test-results.ndjson
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-data
+          path: coverage/coverage-summary.json
+
+  coverage:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/download-artifact@v4
+        with:
+          name: coverage-data
+          path: coverage/
+      - name: Coverage summary
+        run: node --experimental-strip-types scripts/coverage-summary.mts
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/

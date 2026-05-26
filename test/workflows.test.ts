@@ -133,27 +133,43 @@ describe("release.yml", () => {
 });
 
 describe("ci.yml", () => {
-  it("CI-01: triggers on push and pull_request to main, ci job exists", () => {
+  it("CI-01: triggers on push to main, all pull_requests, and workflow_dispatch", () => {
     const on = ciYml.on as any;
     assert.ok(
       Array.isArray(on.push.branches) && on.push.branches.includes("main"),
       "push trigger should include main branch",
     );
-    assert.ok(
-      Array.isArray(on.pull_request.branches) &&
-        on.pull_request.branches.includes("main"),
-      "pull_request trigger should include main branch",
+    assert.ok("pull_request" in on, "pull_request trigger should exist");
+    assert.equal(
+      on.pull_request,
+      null,
+      "pull_request trigger should have no filters (includes drafts)",
     );
-    assert.ok((ciYml.jobs as any).ci, "ci job should exist");
+    assert.ok(
+      "workflow_dispatch" in on,
+      "workflow_dispatch trigger should exist",
+    );
   });
 
-  it("CI-02: setup-node step has cache: npm", () => {
-    const steps = (ciYml.jobs as any).ci.steps;
+  it("CI-02: lint, test, and coverage jobs exist", () => {
+    const jobs = ciYml.jobs as any;
+    assert.ok(jobs.lint, "lint job should exist");
+    assert.ok(jobs.test, "test job should exist");
+    assert.ok(jobs.coverage, "coverage job should exist");
+  });
+
+  it("CI-03: coverage job needs test", () => {
+    const needs = (ciYml.jobs as any).coverage.needs;
+    assert.equal(needs, "test", "coverage job should depend on test job");
+  });
+
+  it("CI-04: test job setup-node has cache: npm", () => {
+    const steps = (ciYml.jobs as any).test.steps;
     const setupNodeStep = steps.find(
       (s: any) =>
         typeof s.uses === "string" && s.uses.startsWith("actions/setup-node"),
     );
-    assert.ok(setupNodeStep, "setup-node step should exist");
+    assert.ok(setupNodeStep, "setup-node step should exist in test job");
     assert.equal(
       setupNodeStep.with?.cache,
       "npm",
@@ -161,12 +177,13 @@ describe("ci.yml", () => {
     );
   });
 
-  it("CI-03: ci job skips draft pull requests", () => {
-    const jobIf = (ciYml.jobs as any).ci.if as string;
-    assert.ok(jobIf.includes("pull_request.draft"));
-    assert.ok(
-      !jobIf.includes("skip ci"),
-      "skip ci is handled natively by GitHub",
-    );
+  it("CI-05: no job has an if condition gating on draft", () => {
+    const jobs = ciYml.jobs as any;
+    for (const [name, job] of Object.entries(jobs) as [string, any][]) {
+      assert.ok(
+        !job.if?.includes("draft"),
+        `${name} job should not gate on draft (handled by pull_request trigger)`,
+      );
+    }
   });
 });
