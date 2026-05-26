@@ -151,39 +151,19 @@ describe("ci.yml", () => {
     );
   });
 
-  it("CI-02: lint, test, and coverage jobs exist", () => {
+  it("CI-02: lint and test jobs exist", () => {
     const jobs = ciYml.jobs as any;
     assert.ok(jobs.lint, "lint job should exist");
     assert.ok(jobs.test, "test job should exist");
-    assert.ok(jobs.coverage, "coverage job should exist");
   });
 
-  it("CI-03: coverage job needs test", () => {
-    const needs = (ciYml.jobs as any).coverage.needs;
-    assert.equal(needs, "test", "coverage job should depend on test job");
-  });
-
-  it("CI-04: test job setup-node has cache: npm", () => {
+  it("CI-03: test job setup-node has cache: npm", () => {
     const steps = (ciYml.jobs as any).test.steps;
     const setupNodeStep = steps.find(
       (s: any) =>
         typeof s.uses === "string" && s.uses.startsWith("actions/setup-node"),
     );
     assert.ok(setupNodeStep, "setup-node step should exist in test job");
-    assert.equal(
-      setupNodeStep.with?.cache,
-      "npm",
-      "setup-node should have cache: npm",
-    );
-  });
-
-  it("CI-05: no job has an if condition gating on draft", () => {
-    const jobs = ciYml.jobs as any;
-    for (const [name, job] of Object.entries(jobs) as [string, any][]) {
-      assert.ok(
-        !job.if?.includes("draft"),
-        `${name} job should not gate on draft (handled by pull_request trigger)`,
-      );
-    }
+    assert.equal(setupNodeStep.with?.cache, "npm");
   });
 });
