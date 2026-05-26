@@ -161,8 +161,11 @@ describe("ci.yml", () => {
     );
   });
 
-  it("CI-03: ci job has no if condition", () => {
+  it("CI-03: ci job skips draft pull requests", () => {
     const jobIf = (ciYml.jobs as any).ci.if;
-    assert.equal(jobIf, undefined, "ci job should not have an if condition");
+    assert.ok(
+      typeof jobIf === "string" && jobIf.includes("pull_request.draft"),
+      "ci job if condition should check for draft pull requests",
+    );
   });
 });

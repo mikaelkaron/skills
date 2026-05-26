@@ -8,6 +8,11 @@ on:
 
 jobs:
   ci:
+    if: >-
+      (github.event_name == 'push' || !github.event.pull_request.draft) &&
+      !contains(github.event.head_commit.message, '[skip ci]') &&
+      (github.event_name != 'pull_request' ||
+       !contains(github.event.pull_request.title, '[skip ci]'))
     runs-on: ubuntu-latest
     permissions:
       contents: read
