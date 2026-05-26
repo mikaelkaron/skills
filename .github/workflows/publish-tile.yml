@@ -42,7 +42,7 @@ jobs:
       matrix:
         tile: ${{ fromJson(needs.setup.outputs.matrix) }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: tesslio/setup-tessl@v2
         with:
           token: ${{ secrets.TESSL_API_TOKEN }}
