@@ -162,10 +162,11 @@ describe("ci.yml", () => {
   });
 
   it("CI-03: ci job skips draft pull requests", () => {
-    const jobIf = (ciYml.jobs as any).ci.if;
+    const jobIf = (ciYml.jobs as any).ci.if as string;
+    assert.ok(jobIf.includes("pull_request.draft"));
     assert.ok(
-      typeof jobIf === "string" && jobIf.includes("pull_request.draft"),
-      "ci job if condition should check for draft pull requests",
+      !jobIf.includes("skip ci"),
+      "skip ci is handled natively by GitHub",
     );
   });
 });
