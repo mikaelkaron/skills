@@ -90,20 +90,24 @@ src/
 
 ## Dependency Graph
 
-```
-@mikaelkaron/skills (root, bin: mks)
-├── @mikaelkaron/skills-cli          (core plugin — contributes oclif config)
-│   └── @oclif/plugin-plugins        (enables user-installable plugins)
-├── @oclif/core                      (CLI framework)
-└── which                            (used by tessl lib for binary resolution)
+```mermaid
+graph TD
+  root["@mikaelkaron/skills\n(bin: mks)"]
+  cli["@mikaelkaron/skills-cli\n(core plugin)"]
+  pp["@oclif/plugin-plugins"]
+  core["@oclif/core"]
+  which["which"]
+  cpf["@mikaelkaron/skills-cherry-pick-filter\n(standalone plugin)"]
+  tessl_pkg["@mikaelkaron/skills-tessl\n(standalone plugin)"]
 
-@mikaelkaron/skills-cherry-pick-filter (standalone plugin)
-├── @oclif/core
-└── which
-
-@mikaelkaron/skills-tessl (standalone plugin)
-├── @oclif/core
-└── which
+  root --> cli
+  root --> core
+  root --> which
+  cli --> pp
+  cpf --> core
+  cpf --> which
+  tessl_pkg --> core
+  tessl_pkg --> which
 ```
 
 Workspace packages are cross-referenced via npm's `workspaces` mechanism. During release the root `package.json` declares `@mikaelkaron/skills-cli` as a runtime dependency at the same version as the workspace packages.
@@ -120,14 +124,16 @@ The `packages/cli` package has no `src/` directory and no build step — it is p
 
 Build sequence during release (driven by `release.config.mjs`):
 
-1. `npm ci` — clean install of all workspace dependencies.
-2. `node scripts/set-workspace-versions.mjs <version>` — rewrites `version` and cross-workspace dependency version pins in all `package.json` files atomically.
-3. `npm install --package-lock-only` — updates `package-lock.json` to reflect new versions.
-4. `npm run build` (`tsc -b`) — compiles all packages.
-5. `oclif manifest .` (per package `prepublishOnly`) — generates `oclif.manifest.json` for command discovery.
-6. `@semantic-release/npm` publishes root, `packages/cli`, `packages/cherry-pick-filter`, and `packages/tessl` as separate npm packages.
-7. `@semantic-release/git` commits `CHANGELOG.md`, `package.json`, `package-lock.json`, and all `packages/*/package.json` back to the repository with `[skip ci]`.
-8. `@semantic-release/github` creates a GitHub release.
+```mermaid
+graph TD
+  A["npm ci"] --> B["set-workspace-versions\n(rewrite version pins)"]
+  B --> C["npm install --package-lock-only\n(update lockfile)"]
+  C --> D["npm run build\n(tsc -b)"]
+  D --> E["oclif manifest\n(per package prepublishOnly)"]
+  E --> F["@semantic-release/npm publish\n(root + 3 packages)"]
+  F --> G["@semantic-release/git commit\n(CHANGELOG, package.json files)"]
+  G --> H["@semantic-release/github\n(create release)"]
+```
 
 ---
 
@@ -139,10 +145,15 @@ Three GitHub Actions workflows handle the full software delivery lifecycle.
 
 Triggers on push to `main`, all pull requests, and manual dispatch.
 
-| Job    | Steps                                                                                                              |
-| ------ | ------------------------------------------------------------------------------------------------------------------ |
-| `lint` | `npm ci` → `npm run lint` (oxlint)                                                                                 |
-| `test` | `npm ci` → `npm run build` → `npm run test:types` → `npm run test:coverage` → summarise results → upload artifacts |
+```mermaid
+graph LR
+  subgraph lint["lint (parallel)"]
+    L1["npm ci"] --> L2["npm run lint"]
+  end
+  subgraph test["test (parallel)"]
+    T1["npm ci"] --> T2["npm run build"] --> T3["test:types"] --> T4["test:coverage"] --> T5["summarise results"] --> T6["upload artifacts"]
+  end
+```
 
 The test job runs the Node.js built-in test runner (`node --experimental-strip-types --test`) with `c8` for coverage collection. Test results are written to `test-results.ndjson` via a custom reporter at `scripts/reporters/test.mts`. Both the NDJSON results file and the `coverage/` directory are uploaded as GitHub Actions artifacts.
 
