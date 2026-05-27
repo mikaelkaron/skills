@@ -1,6 +1,6 @@
 {
   "name": "mikaelkaron/cli",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "private": false,
   "summary": "Manages the skills CLI and its plugins. Use when installing, listing, updating, or removing skills plugins, or setting up shell autocomplete.",
   "skills": {
