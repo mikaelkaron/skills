@@ -1,3 +1,12 @@
+# [2.1.0](https://github.com/mikaelkaron/skills/compare/v2.0.0...v2.1.0) (2026-05-27)
+
+
+### Features
+
+* add @oclif/plugin-autocomplete dependency ([9d3133d](https://github.com/mikaelkaron/skills/commit/9d3133d294f0f162e4a33982107ca25a1f2aa89b))
+* add autocomplete command to cli skill and plugin-not-found to mks ([833877e](https://github.com/mikaelkaron/skills/commit/833877efef6b6319825c07253ba702b26c61ae3a))
+* add tessl tile reference to root package ([2be456e](https://github.com/mikaelkaron/skills/commit/2be456e41e4815297d086913b265afc4acbc59d3))
+
 # [2.0.0](https://github.com/mikaelkaron/skills/compare/v1.0.1...v2.0.0) (2026-05-26)
 
 

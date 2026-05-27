@@ -63,3 +63,14 @@ mks autocomplete -r          # refresh the autocomplete cache
 ```
 
 Follow the printed instructions to add the autocomplete hook to your shell profile.
+
+## Help
+
+```bash
+mks help                     # list all top-level commands
+mks help [command]           # show detailed help for a command
+mks help --nested-commands   # show all commands including subcommands
+mks [command] --help         # shorthand: show help for a specific command
+```
+
+Use `mks help plugins` to see the full plugins subcommand list, or `mks help autocomplete` for autocomplete setup details.
