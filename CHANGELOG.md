@@ -1,3 +1,11 @@
+# [2.2.0](https://github.com/mikaelkaron/skills/compare/v2.1.0...v2.2.0) (2026-05-27)
+
+
+### Features
+
+* **260527-fjz:** add @oclif/plugin-help dependency and oclif plugin entry ([b203683](https://github.com/mikaelkaron/skills/commit/b2036837f50e4388d4ffef2482d31652f9a1a9de))
+* **tile:** bump cli tile version to 0.5.0 ([01b9f29](https://github.com/mikaelkaron/skills/commit/01b9f29c6bc6249160462e4985fd85d7a91e8057))
+
 # [2.1.0](https://github.com/mikaelkaron/skills/compare/v2.0.0...v2.1.0) (2026-05-27)
 
 
