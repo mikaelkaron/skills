@@ -38,31 +38,16 @@ mks plugins:install tessl
 mks plugins:uninstall cherry-pick-filter
 ```
 
-After installing, confirm the plugin appears in the list:
-
-```bash
-mks plugins
-```
-
-If missing: verify the package name follows `@mikaelkaron/skills-<name>` convention (e.g. `mks plugins:install cherry-pick-filter` resolves to `@mikaelkaron/skills-cherry-pick-filter`).
-
-After uninstalling, confirm the plugin is no longer listed:
-
-```bash
-mks plugins
-```
+After install/uninstall, run `mks plugins` to confirm. If a plugin is missing after install, verify the name follows `@mikaelkaron/skills-<name>` (e.g. `cherry-pick-filter` → `@mikaelkaron/skills-cherry-pick-filter`).
 
 ## Autocomplete
 
 ```bash
-mks autocomplete             # display installation instructions for current shell
-mks autocomplete bash        # display bash setup instructions
-mks autocomplete zsh         # display zsh setup instructions
-mks autocomplete powershell  # display powershell setup instructions
-mks autocomplete -r          # refresh the autocomplete cache
+mks autocomplete [bash|zsh|powershell]   # display shell-specific setup instructions
+mks autocomplete -r                      # refresh the autocomplete cache
 ```
 
-Follow the printed instructions to add the autocomplete hook to your shell profile.
+Follow the printed instructions to add the hook to your shell profile.
 
 ## Help
 
