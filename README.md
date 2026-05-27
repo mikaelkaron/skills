@@ -26,7 +26,7 @@ mks --version
 2. Install a skill plugin:
 
 ```bash
-mks plugins install cherry-pick-filter
+mks plugins:install cherry-pick-filter
 ```
 
 3. Install the corresponding tessl skill tile:

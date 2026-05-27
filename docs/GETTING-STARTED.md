@@ -30,7 +30,7 @@ Verify the installation:
 mks --version
 ```
 
-You should see the version string (e.g., `@mikaelkaron/skills/1.0.1`).
+You should see the version string (e.g., `@mikaelkaron/skills/2.0.0`).
 
 ---
 
@@ -48,7 +48,7 @@ List currently installed plugins:
 mks plugins
 ```
 
-At a fresh install, only the core plugin (`@oclif/plugin-plugins`) is loaded. Feature commands are provided by installable plugins.
+At a fresh install, three core plugins are bundled: `@oclif/plugin-autocomplete`, `@oclif/plugin-not-found`, and `@oclif/plugin-plugins`. Feature commands are provided by installable plugins.
 
 ---
 

@@ -38,7 +38,7 @@ The `packages/*` glob is declared as the npm workspaces entry. All packages shar
 
 ### Root (`@mikaelkaron/skills`)
 
-The root package is the primary published distribution. Its `bin/run.js` entry point delegates to `@oclif/core`'s `execute()` loader, which discovers plugins declared in the `oclif` section of `package.json`. The root oclif config lists `@oclif/plugin-plugins` as a core plugin.
+The root package is the primary published distribution. Its `bin/run.js` entry point delegates to `@oclif/core`'s `execute()` loader, which discovers plugins declared in the `oclif` section of `package.json`. The root oclif config lists `@oclif/plugin-autocomplete`, `@oclif/plugin-not-found`, and `@oclif/plugin-plugins` as core plugins.
 
 The root package does **not** contain its own commands. All commands are contributed by plugins.
 
@@ -89,12 +89,16 @@ src/
 graph TD
   root["@mikaelkaron/skills\n(bin: mks)"]
   pp["@oclif/plugin-plugins"]
+  pac["@oclif/plugin-autocomplete"]
+  pnf["@oclif/plugin-not-found"]
   core["@oclif/core"]
   which["which"]
   cpf["@mikaelkaron/skills-cherry-pick-filter\n(standalone plugin)"]
   tessl_pkg["@mikaelkaron/skills-tessl\n(standalone plugin)"]
 
   root --> pp
+  root --> pac
+  root --> pnf
   root --> core
   root --> which
   cpf --> core
@@ -117,13 +121,14 @@ Build sequence during release (driven by `release.config.mjs`):
 
 ```mermaid
 graph TD
-  A["npm ci"] --> B["set-workspace-versions\n(rewrite version pins)"]
-  B --> C["npm install --package-lock-only\n(update lockfile)"]
-  C --> D["npm run build\n(tsc -b)"]
-  D --> E["oclif manifest\n(per package prepublishOnly)"]
-  E --> F["@semantic-release/npm publish\n(root + 2 packages)"]
-  F --> G["@semantic-release/git commit\n(CHANGELOG, package.json files)"]
-  G --> H["@semantic-release/github\n(create release)"]
+  A["@semantic-release/changelog\n(update CHANGELOG.md)"] --> B["npm ci"]
+  B --> C["set-workspace-versions\n(rewrite version pins)"]
+  C --> D["update-lockfile\n(npm install --package-lock-only)"]
+  D --> E["npm run build\n(tsc -b)"]
+  E --> F["oclif manifest\n(per package prepublishOnly)"]
+  F --> G["@semantic-release/npm publish\n(root + 2 packages)"]
+  G --> H["@semantic-release/git commit\n(CHANGELOG, package.json files)"]
+  H --> I["@semantic-release/github\n(create release)"]
 ```
 
 ---

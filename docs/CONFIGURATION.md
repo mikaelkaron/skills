@@ -103,14 +103,15 @@ Lint is enforced in CI on every push to `main` and every pull request (see [GitH
 
 Config file: `oxfmt.config.ts` (repository root)
 
-| Option          | Value   |
-| --------------- | ------- |
-| `printWidth`    | `80`    |
-| `tabWidth`      | `2`     |
-| `useTabs`       | `false` |
-| `semi`          | `true`  |
-| `singleQuote`   | `false` |
-| `trailingComma` | `"all"` |
+| Option           | Value              |
+| ---------------- | ------------------ |
+| `printWidth`     | `80`               |
+| `tabWidth`       | `2`                |
+| `useTabs`        | `false`            |
+| `semi`           | `true`             |
+| `singleQuote`    | `false`            |
+| `trailingComma`  | `"all"`            |
+| `ignorePatterns` | `["CHANGELOG.md"]` |
 
 Run from the root:
 
@@ -154,13 +155,13 @@ No minimum coverage thresholds are configured. The CI job uploads `test-results.
 
 `oclif` block in `package.json`:
 
-| Key            | Value                       | Description                                  |
-| -------------- | --------------------------- | -------------------------------------------- |
-| `bin`          | `mks`                       | CLI binary name                              |
-| `dirname`      | `mikaelkaron/skills`        | oclif data directory under the OS config dir |
-| `pluginPrefix` | `skills`                    | Prefix for discoverable plugins              |
-| `scope`        | `mikaelkaron`               | npm scope for plugin resolution              |
-| `plugins`      | `["@oclif/plugin-plugins"]` | Bundled plugins loaded at startup            |
+| Key            | Value                                                                                | Description                                  |
+| -------------- | ------------------------------------------------------------------------------------ | -------------------------------------------- |
+| `bin`          | `mks`                                                                                | CLI binary name                              |
+| `dirname`      | `mikaelkaron/skills`                                                                 | oclif data directory under the OS config dir |
+| `pluginPrefix` | `skills`                                                                             | Prefix for discoverable plugins              |
+| `scope`        | `mikaelkaron`                                                                        | npm scope for plugin resolution              |
+| `plugins`      | `["@oclif/plugin-autocomplete", "@oclif/plugin-not-found", "@oclif/plugin-plugins"]` | Bundled plugins loaded at startup            |
 
 ### `packages/cherry-pick-filter`
 
@@ -189,10 +190,11 @@ No minimum coverage thresholds are configured. The CI job uploads `test-results.
 
 Each package that ships a skill tile carries a `tessl` block in its `package.json` and a `tile.json` in its corresponding `skills/<package>/` directory.
 
-| Package              | Tile name                        | Tile version |
-| -------------------- | -------------------------------- | ------------ |
-| `cherry-pick-filter` | `mikaelkaron/cherry-pick-filter` | `0.3.0`      |
-| `tessl`              | `mikaelkaron/tessl`              | `0.4.0`      |
+| Package                      | Tile name                        | Tile version |
+| ---------------------------- | -------------------------------- | ------------ |
+| root (`@mikaelkaron/skills`) | `mikaelkaron/cli`                | `0.4.0`      |
+| `cherry-pick-filter`         | `mikaelkaron/cherry-pick-filter` | `0.3.0`      |
+| `tessl`                      | `mikaelkaron/tessl`              | `0.4.0`      |
 
 The tile version in `package.json` (`tessl.version`) and `skills/<package>/tile.json` (`version`) must be kept in sync manually when the tile definition changes.
 
@@ -295,7 +297,7 @@ Required secrets: `NPM_TOKEN`, `GITHUB_TOKEN`.
 
 Trigger: `workflow_dispatch` only. Select one or more packages via boolean inputs (`cherry-pick-filter`, `cli`, `tessl`).
 
-Each selected package's tile directory under `skills/<package>/` is published using the tessl CLI (`tessl tile publish .`). Authentication is handled by the `tesslio/setup-tessl@v2` action using OIDC (`id-token: write`).
+The `setup` job builds a matrix of selected tile directories under `skills/`. Each selected package's tile directory is then published in parallel using the tessl CLI (`tessl tile publish .`). Authentication is handled by the `tesslio/setup-tessl@v2` action using OIDC (`id-token: write`).
 
 Required secret: `TESSL_API_TOKEN`.
 

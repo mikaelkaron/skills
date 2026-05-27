@@ -77,7 +77,7 @@ npm run format
 npm run lint
 ```
 
-CI enforces both in the `lint` job on every push and pull request.
+CI enforces linting in the `lint` job on every push and pull request. Formatting is not checked by CI — run `npm run format` locally before committing.
 
 ## Adding a New Package
 
@@ -177,4 +177,4 @@ Releases are triggered manually via the `Release` workflow (`.github/workflows/r
 
 ## Tile Publishing
 
-Tessl skill tiles are published separately via the `Publish Tile` workflow (`.github/workflows/publish-tile.yml`). Trigger it manually and select which tiles to publish. Each selected tile runs `tessl tile publish .` from its own directory using the `TESSL_API_TOKEN` secret.
+Tessl skill tiles are published separately via the `Publish Tile` workflow (`.github/workflows/publish-tile.yml`). Trigger it manually and select which tiles to publish (`cherry-pick-filter`, `cli`, or `tessl`). Each selected tile runs `tessl tile publish .` from its directory under `skills/` using the `TESSL_API_TOKEN` secret.
