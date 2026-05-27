@@ -155,13 +155,13 @@ No minimum coverage thresholds are configured. The CI job uploads `test-results.
 
 `oclif` block in `package.json`:
 
-| Key            | Value                                                                                | Description                                  |
-| -------------- | ------------------------------------------------------------------------------------ | -------------------------------------------- |
-| `bin`          | `mks`                                                                                | CLI binary name                              |
-| `dirname`      | `mikaelkaron/skills`                                                                 | oclif data directory under the OS config dir |
-| `pluginPrefix` | `skills`                                                                             | Prefix for discoverable plugins              |
-| `scope`        | `mikaelkaron`                                                                        | npm scope for plugin resolution              |
-| `plugins`      | `["@oclif/plugin-autocomplete", "@oclif/plugin-not-found", "@oclif/plugin-plugins"]` | Bundled plugins loaded at startup            |
+| Key            | Value                                                                                                      | Description                                  |
+| -------------- | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| `bin`          | `mks`                                                                                                      | CLI binary name                              |
+| `dirname`      | `mikaelkaron/skills`                                                                                       | oclif data directory under the OS config dir |
+| `pluginPrefix` | `skills`                                                                                                   | Prefix for discoverable plugins              |
+| `scope`        | `mikaelkaron`                                                                                              | npm scope for plugin resolution              |
+| `plugins`      | `["@oclif/plugin-help", "@oclif/plugin-autocomplete", "@oclif/plugin-not-found", "@oclif/plugin-plugins"]` | Bundled plugins loaded at startup            |
 
 ### `packages/cherry-pick-filter`
 
@@ -192,7 +192,7 @@ Each package that ships a skill tile carries a `tessl` block in its `package.jso
 
 | Package                      | Tile name                        | Tile version |
 | ---------------------------- | -------------------------------- | ------------ |
-| root (`@mikaelkaron/skills`) | `mikaelkaron/cli`                | `0.4.0`      |
+| root (`@mikaelkaron/skills`) | `mikaelkaron/cli`                | `0.5.0`      |
 | `cherry-pick-filter`         | `mikaelkaron/cherry-pick-filter` | `0.3.0`      |
 | `tessl`                      | `mikaelkaron/tessl`              | `0.4.0`      |
 
